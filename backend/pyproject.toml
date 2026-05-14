@@ -1,0 +1,22 @@
+[project]
+name = "suurennuslasi-backend"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "nicolasspring",email = "springn.ch@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi (>=0.136.1,<0.137.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+black = "^26.3.1"
+pytest = "^9.0.3"
+
