@@ -47,7 +47,10 @@ export function PostsMap() {
               padding: 0,
             }}
           >
-            <MapPin color={selectedPost?.id === post.id ? "green" : "black"} size={32} />
+            <MapPin
+              color={selectedPost?.id === post.id ? "green" : "black"}
+              size={32}
+            />
           </button>
         </Marker>
       ))}
