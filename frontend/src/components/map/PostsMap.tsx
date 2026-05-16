@@ -1,11 +1,19 @@
+import { useState } from "react";
+
 import Map, { Marker, Popup } from "react-map-gl/maplibre";
+
+import { MapPin } from "lucide-react";
 
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { usePosts } from "../../features/posts/hooks/usePosts";
 
+import type { Post } from "../../features/posts/types";
+
 export function PostsMap() {
   const { data: posts, isLoading } = usePosts();
+
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -26,8 +34,46 @@ export function PostsMap() {
           key={post.id}
           longitude={post.longitude}
           latitude={post.latitude}
-        />
+        >
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedPost(post);
+            }}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+            }}
+          >
+            <MapPin color={selectedPost?.id === post.id ? "green" : "black"} size={32} />
+          </button>
+        </Marker>
       ))}
+
+      {selectedPost && (
+        <Popup
+          longitude={selectedPost.longitude}
+          latitude={selectedPost.latitude}
+          anchor="top"
+          onClose={() => setSelectedPost(null)}
+        >
+          <div
+            style={{
+              maxWidth: 200,
+            }}
+          >
+            <p
+              style={{
+                margin: 0,
+              }}
+            >
+              {selectedPost.caption}
+            </p>
+          </div>
+        </Popup>
+      )}
     </Map>
   );
 }
