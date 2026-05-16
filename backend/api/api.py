@@ -21,7 +21,7 @@ async def get_posts():
     return [
         {
             "id": "1",
-            "caption": "Zurich",
+            "caption": "A sunny day in Zurich.",
             "latitude": 47.3769,
             "longitude": 8.5417,
         }
