@@ -1,12 +1,10 @@
-from fastapi import APIRouter, Depends
-
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from sqlmodel import select
+import typing as t
 
 from app.core.db import get_session
 from app.models.post import Post
-import typing as t
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
 
 router = APIRouter(tags=["posts"])
 

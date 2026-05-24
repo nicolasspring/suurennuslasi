@@ -1,12 +1,10 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
 from app.api.routes.posts import router as posts_router
-from fastapi.middleware.cors import CORSMiddleware
-
-from sqlmodel import SQLModel
-
 from app.core.db import engine
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from sqlmodel import SQLModel
 
 
 @asynccontextmanager
