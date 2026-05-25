@@ -1,21 +1,32 @@
 from contextlib import asynccontextmanager
 
-from app.api.routes.posts import router as posts_router
-from app.core.db import engine
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel
+
+from app.api.exceptions import (
+    ImportJobNotFoundException,
+    PostNotFoundException,
+    import_job_exception_handler,
+    post_exception_handler,
+)
+from app.api.routes.ingestion import router as ingestion_router
+from app.api.routes.posts import router as posts_router
+from app.core.db import engine
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
+        await conn.run_sync(SQLModel.metadata.drop_all)
         await conn.run_sync(SQLModel.metadata.create_all)
 
     yield
 
 
 app = FastAPI(lifespan=lifespan)
+app.add_exception_handler(ImportJobNotFoundException, import_job_exception_handler)
+app.add_exception_handler(PostNotFoundException, post_exception_handler)
 
 origins = [
     "http://localhost:5173",
@@ -29,10 +40,5 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-@app.get("/")
-async def root():
-    return {"message": "hello"}
-
-
+app.include_router(ingestion_router)
 app.include_router(posts_router)
