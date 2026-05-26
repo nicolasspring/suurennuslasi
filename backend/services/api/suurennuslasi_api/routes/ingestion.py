@@ -3,9 +3,10 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.crud.job import ImportJobRepository
-from app.core.db import get_session
-from app.models.job import ImportJob
+from suurennuslasi_db.crud.base import BaseRepository
+from suurennuslasi_db.crud.job import ImportJobRepository
+from suurennuslasi_db.models.job import ImportJob
+from suurennuslasi_db.session.db import get_session
 
 router = APIRouter(tags=["ingestion"])
 

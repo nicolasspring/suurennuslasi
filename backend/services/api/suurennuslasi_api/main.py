@@ -4,15 +4,18 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel
 
-from app.api.exceptions import (
-    ImportJobNotFoundException,
-    PostNotFoundException,
+from suurennuslasi_api.exceptions import (
     import_job_exception_handler,
     post_exception_handler,
 )
-from app.api.routes.ingestion import router as ingestion_router
-from app.api.routes.posts import router as posts_router
-from app.core.db import engine
+from suurennuslasi_api.routes.ingestion import router as ingestion_router
+from suurennuslasi_api.routes.posts import router as posts_router
+
+from suurennuslasi_db.crud.exceptions import (
+    ImportJobNotFoundException,
+    PostNotFoundException,
+)
+from suurennuslasi_db.session.db import engine
 
 
 @asynccontextmanager

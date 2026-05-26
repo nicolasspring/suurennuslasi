@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.crud.post import PostRepository
-from app.core.db import get_session
-from app.models.post import Post
+from suurennuslasi_db.crud.post import PostRepository
+from suurennuslasi_db.models.post import Post
+from suurennuslasi_db.session.db import get_session
 
 router = APIRouter(tags=["posts"])
 

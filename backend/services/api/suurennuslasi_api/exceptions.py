@@ -1,15 +1,12 @@
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 
-from app.models.api import BaseResponse
+from suurennuslasi_api.models.api import BaseResponse
 
-
-class ImportJobNotFoundException(Exception):
-    pass
-
-
-class PostNotFoundException(Exception):
-    pass
+from suurennuslasi_db.crud.exceptions import (
+    ImportJobNotFoundException,
+    PostNotFoundException,
+)
 
 
 def import_job_exception_handler(
