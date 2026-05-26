@@ -1,5 +1,5 @@
 [project]
-name = "suurennuslasi-db"
+name = "suurennuslasi-domain"
 version = "0.1.0"
 description = ""
 authors = [
@@ -7,15 +7,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-    "sqlalchemy (>=2.0.50,<3.0.0)",
-    "sqlmodel (>=0.0.38,<0.0.39)",
-    "pydantic (>=2.13.4,<3.0.0)",
-    "pydantic-settings (>=2.14.1,<3.0.0)",
-    "suurennuslasi-domain",
 ]
-
-[tool.poetry.dependencies]
-suurennuslasi-domain = { path = "../../packages/domain", develop = true }
 
 [tool.poetry.group.dev.dependencies]
 black = "^26.5.1"
