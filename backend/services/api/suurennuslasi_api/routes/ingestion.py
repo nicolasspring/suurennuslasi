@@ -15,7 +15,7 @@ async def ingest_file(
     file: UploadFile,
     session: AsyncSession = Depends(get_session),
 ) -> ImportJob:
-    job = await ImportJobRepository.create(ImportJobCreate())
+    job = await ImportJobRepository.create(session, ImportJobCreate())
     object_key = f"uploads/{job.id}/instagram.zip"
     # upload to minio
     # publish event
