@@ -11,12 +11,14 @@ services:
     environment:
       - VITE_API_URL=http://localhost:8000
     depends_on:
-      - backend
+      - api
 
-  backend:
+  api:
     build:
       context: ./backend
-    command: python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      dockerfile: services/api/Dockerfile
+    working_dir: /app/services/api
+    command: python -m uvicorn suurennuslasi_api.main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
     volumes:
