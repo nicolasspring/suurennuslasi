@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel
 
-from suurennuslasi_api.exceptions import (
+from suurennuslasi_api.exceptions.handlers import (
     import_job_exception_handler,
     post_exception_handler,
 )
