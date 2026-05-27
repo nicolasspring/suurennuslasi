@@ -22,4 +22,4 @@ build-backend = "poetry.core.masonry.api"
 profile = "black"
 sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'SERVICES', 'PACKAGES', 'FIRSTPARTY', 'LOCALFOLDER']
 known_services = ["suurennuslasi_api"]
-known_packages = ["suurennuslasi_db", "suurennuslasi_domain"]
+known_packages = ["suurennuslasi_db", "suurennuslasi_domain", "suurennuslasi_storage"]

@@ -13,12 +13,14 @@ dependencies = [
     "python-multipart (>=0.0.29,<0.0.30)",
     "suurennuslasi-db",
     "suurennuslasi-domain",
+    "suurennuslasi-storage",
     "asyncpg (>=0.31.0,<0.32.0)",
 ]
 
 [tool.poetry.dependencies]
 suurennuslasi-db = { path = "../../packages/db", develop = true }
 suurennuslasi-domain = { path = "../../packages/domain", develop = true }
+suurennuslasi-storage = { path = "../../packages/storage", develop = true }
 
 [tool.poetry.group.dev.dependencies]
 black = "^26.5.1"
@@ -33,4 +35,4 @@ build-backend = "poetry.core.masonry.api"
 profile = "black"
 sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'SERVICES', 'PACKAGES', 'FIRSTPARTY', 'LOCALFOLDER']
 known_services = ["suurennuslasi_api"]
-known_packages = ["suurennuslasi_db", "suurennuslasi_domain"]
+known_packages = ["suurennuslasi_db", "suurennuslasi_domain", "suurennuslasi_storage"]

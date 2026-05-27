@@ -899,6 +899,20 @@ type = "directory"
 url = "../../packages/domain"
 
 [[package]]
+name = "suurennuslasi-storage"
+version = "0.1.0"
+description = ""
+optional = false
+python-versions = ">=3.12"
+groups = ["main"]
+files = []
+develop = true
+
+[package.source]
+type = "directory"
+url = "../../packages/storage"
+
+[[package]]
 name = "typing-extensions"
 version = "4.15.0"
 description = "Backported and Experimental Type Hints for Python 3.9+"
@@ -947,4 +961,4 @@ standard = ["colorama (>=0.4) ; sys_platform == \"win32\"", "httptools (>=0.6.3)
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "3b1e35ee925c0062c8c04926e682ebac4bbfcb9a065e6fcd5c909447d31af5e2"
+content-hash = "68211c3b2429e12fb422db48d1814fb0991f812aeccf8117e11583125ac17c42"
