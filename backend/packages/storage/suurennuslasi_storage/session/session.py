@@ -13,9 +13,9 @@ minio_bucket_name = os.getenv("MINIO_BUCKET_NAME")
 async def get_minio_client():
     async with session.client(
         "s3",
-        endpoint_url=os.getenv("MINIO_ENDPOINT"),
-        aws_access_key_id=os.getenv("AWS_ACCESS_KEY"),
-        aws_secret_access_key=os.getenv("AWS_SECRET_KEY"),
+        endpoint_url=f"http://{os.getenv("MINIO_ENDPOINT")}",
+        aws_access_key_id=os.getenv("MINIO_ACCESS_KEY"),
+        aws_secret_access_key=os.getenv("MINIO_SECRET_KEY"),
         config=config,
     ) as client:
         yield client
