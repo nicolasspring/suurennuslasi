@@ -16,6 +16,7 @@ from suurennuslasi_db.crud.exceptions import (
     PostNotFoundException,
 )
 from suurennuslasi_db.session.db import engine
+from suurennuslasi_storage.crud.storage import AsyncObjectStorage
 
 
 @asynccontextmanager
@@ -23,6 +24,7 @@ async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(SQLModel.metadata.drop_all)
         await conn.run_sync(SQLModel.metadata.create_all)
+        await AsyncObjectStorage.create_bucket()
 
     yield
 

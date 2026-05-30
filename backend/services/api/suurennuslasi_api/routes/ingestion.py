@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from suurennuslasi_db.crud.job import ImportJobRepository
 from suurennuslasi_db.models.job import ImportJob, ImportJobCreate
 from suurennuslasi_db.session.db import get_session
+from suurennuslasi_storage.crud.storage import AsyncObjectStorage
 
 router = APIRouter(tags=["ingestion"])
 
@@ -17,7 +18,8 @@ async def ingest_file(
 ) -> ImportJob:
     job = await ImportJobRepository.create(session, ImportJobCreate())
     object_key = f"uploads/{job.id}/instagram.zip"
-    # upload to minio
+    AsyncObjectStorage.upload(object_key, file)
+    AsyncObjectStorage.delete(object_key)
     # publish event
     return job
 
