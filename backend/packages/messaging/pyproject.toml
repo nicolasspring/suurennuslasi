@@ -1,5 +1,5 @@
 [project]
-name = "suurennuslasi-api"
+name = "suurennuslasi-messaging"
 version = "0.1.0"
 description = ""
 authors = [
@@ -9,14 +9,7 @@ requires-python = ">=3.12,<4"
 dynamic = [ "dependencies" ]
 
 [tool.poetry.dependencies]
-fastapi = "^0.136.3"
-uvicorn = "^0.48.0"
-greenlet = "^3.5.1"
-python-multipart = "^0.0.29"
-asyncpg = "^0.31.0"
-suurennuslasi-db = { path = "../../packages/db", develop = true }
-suurennuslasi-domain = { path = "../../packages/domain", develop = true }
-suurennuslasi-storage = { path = "../../packages/storage", develop = true }
+aio-pika = "^9.6.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^26.5.1"
