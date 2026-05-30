@@ -1,3 +1,4 @@
+import tempfile
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, UploadFile
@@ -18,8 +19,10 @@ async def ingest_file(
 ) -> ImportJob:
     job = await ImportJobRepository.create(session, ImportJobCreate())
     object_key = f"uploads/{job.id}/instagram.zip"
-    AsyncObjectStorage.upload(object_key, file)
-    AsyncObjectStorage.delete(object_key)
+    await AsyncObjectStorage.upload(object_key, file)
+    with tempfile.NamedTemporaryFile() as tmp:
+        await AsyncObjectStorage.download_to_path(object_key, tmp.name)
+    await AsyncObjectStorage.delete(object_key)
     # publish event
     return job
 
