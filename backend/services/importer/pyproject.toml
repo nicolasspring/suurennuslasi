@@ -1,5 +1,5 @@
 [project]
-name = "suurennuslasi-db"
+name = "suurennuslasi-importer"
 version = "0.1.0"
 description = ""
 authors = [
@@ -9,11 +9,11 @@ requires-python = ">=3.12,<4"
 dynamic = [ "dependencies" ]
 
 [tool.poetry.dependencies]
-sqlalchemy = "^2.0.50"
-sqlmodel = "^0.0.38"
-pydantic = "^2.13.4"
-pydantic-settings = "^2.14.1"
+suurennuslasi-db = { path = "../../packages/db", develop = true }
 suurennuslasi-domain = { path = "../../packages/domain", develop = true }
+suurennuslasi-storage = { path = "../../packages/storage", develop = true }
+suurennuslasi-events = { path = "../../packages/events", develop = true }
+suurennuslasi-messaging = { path = "../../packages/messaging", develop = true }
 
 [tool.poetry.group.dev.dependencies]
 black = "^26.5.1"

@@ -30,6 +30,7 @@ sections = [
 ]
 known_services = [
     "suurennuslasi_api",
+    "suurennuslasi_importer",
 ]
 known_packages = [
     "suurennuslasi_db",
