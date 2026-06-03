@@ -24,6 +24,7 @@ async def ingest_file(
         await AsyncObjectStorage.download_to_path(object_key, tmp.name)
     await AsyncObjectStorage.delete(object_key)
     # publish event
+    # change job status to queued
     return job
 
 
