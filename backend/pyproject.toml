@@ -1,0 +1,26 @@
+[tool.black]
+target-version = ["py312"]
+
+
+[tool.isort]
+profile = "black"
+sections = [
+    "FUTURE",
+    "STDLIB",
+    "THIRDPARTY",
+    "SERVICES",
+    "PACKAGES",
+    "FIRSTPARTY",
+    "LOCALFOLDER",
+]
+known_services = [
+    "suurennuslasi_api",
+    "suurennuslasi_importer",
+]
+known_packages = [
+    "suurennuslasi_db",
+    "suurennuslasi_domain",
+    "suurennuslasi_events",
+    "suurennuslasi_messaging",
+    "suurennuslasi_storage",
+]
