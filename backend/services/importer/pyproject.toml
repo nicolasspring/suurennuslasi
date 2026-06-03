@@ -23,26 +23,3 @@ pytest = "^9.0.3"
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.isort]
-profile = "black"
-sections = [
-    "FUTURE",
-    "STDLIB",
-    "THIRDPARTY",
-    "SERVICES",
-    "PACKAGES",
-    "FIRSTPARTY",
-    "LOCALFOLDER",
-]
-known_services = [
-    "suurennuslasi_api",
-    "suurennuslasi_importer",
-]
-known_packages = [
-    "suurennuslasi_db",
-    "suurennuslasi_domain",
-    "suurennuslasi_events",
-    "suurennuslasi_messaging",
-    "suurennuslasi_storage",
-]
