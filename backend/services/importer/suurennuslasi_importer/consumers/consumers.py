@@ -1,6 +1,6 @@
 from suurennuslasi_importer.handlers.import_zip import import_zip
 
-from suurennuslasi_events.models import ImportCreated
+from suurennuslasi_events.events.models import ImportCreated
 
 
 async def consume_import_created(message):

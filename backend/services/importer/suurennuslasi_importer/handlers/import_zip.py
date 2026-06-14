@@ -1,5 +1,5 @@
-from suurennuslasi_events.models import ImportCreated
+from suurennuslasi_events.events.models import ImportCreated
 
 
 async def import_zip(event: ImportCreated):
-    pass
+    print(event)

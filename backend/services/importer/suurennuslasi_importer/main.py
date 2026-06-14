@@ -7,7 +7,7 @@ from suurennuslasi_messaging.subscriber import subscribe
 
 async def main() -> None:
     await subscribe(
-        "imports",
+        "import.created",
         consume_import_created,
     )
 
