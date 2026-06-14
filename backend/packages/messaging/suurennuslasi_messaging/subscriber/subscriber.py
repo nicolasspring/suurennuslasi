@@ -7,7 +7,7 @@ async def subscribe(
     queue_name: str,
     callback,
 ):
-    connection = await get_connection
+    connection = await get_connection()
     async with connection:
         channel = await connection.channel()
         queue = await channel.declare_queue(queue_name)
