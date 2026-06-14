@@ -1,3 +1,5 @@
+import asyncio
+
 import aio_pika
 
 from suurennuslasi_messaging.session import get_connection
@@ -12,4 +14,4 @@ async def subscribe(
         channel = await connection.channel()
         queue = await channel.declare_queue(queue_name)
         await queue.consume(callback, no_ack=True)
-    pass
+        await asyncio.Future()
