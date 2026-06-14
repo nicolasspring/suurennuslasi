@@ -39,9 +39,12 @@ services:
     env_file:
       - ./backend/.env
     depends_on:
-    - rabbitmq
-    - minio
-    - db
+      rabbitmq:
+        condition: service_healthy
+      minio:
+        condition: service_started
+      db:
+        condition: service_started
 
   db:
     image: postgis/postgis
@@ -72,6 +75,11 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   minio_data:
