@@ -28,6 +28,21 @@ services:
     depends_on:
       - db
 
+  importer:
+    build:
+      context: ./backend
+      dockerfile: services/importer/Dockerfile
+    working_dir: /app/services/importer
+    command: python -m suurennuslasi_importer.main
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    depends_on:
+    - rabbitmq
+    - minio
+    - db
+
   db:
     image: postgis/postgis
     restart: always
