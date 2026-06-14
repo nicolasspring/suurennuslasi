@@ -17,6 +17,7 @@ asyncpg = "^0.31.0"
 suurennuslasi-db = { path = "../../packages/db", develop = true }
 suurennuslasi-domain = { path = "../../packages/domain", develop = true }
 suurennuslasi-storage = { path = "../../packages/storage", develop = true }
+suurennuslasi-messaging = { path = "../../packages/messaging", develop = true }
 
 [tool.poetry.group.dev.dependencies]
 black = "^26.5.1"
