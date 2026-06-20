@@ -13,8 +13,10 @@ logging.basicConfig(
 
 async def main() -> None:
     await subscribe(
-        "import.created",
-        consume_import_created,
+        exchange_name="imports",
+        queue_name="importer.imports",
+        routing_key="import.created",
+        callback=consume_import_created,
     )
 
 

@@ -32,8 +32,13 @@ async def ingest_file(
         await AsyncObjectStorage.download_to_path(object_key, tmp.name)
     await AsyncObjectStorage.delete(object_key)
     logger.info(f"File with key {object_key} deleted from object storage")
-    await publish("import.created", {"job_id": str(job.id), "object_key": object_key})
-    logger.info(f"import.created message for job ID {job.id} published")
+    payload = {"job_id": str(job.id), "object_key": object_key}
+    await publish(
+        exchange_name="imports",
+        routing_key="import.created",
+        payload=payload,
+    )
+    logger.info(f"published import.created for job ID {job.id} published")
     await ImportJobRepository.update(
         session, ImportJobUpdate(id=job.id, status=IMPORT_JOB_STATUS.QUEUED)
     )
