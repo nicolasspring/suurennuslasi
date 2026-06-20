@@ -5,12 +5,22 @@ import aio_pika
 from suurennuslasi_messaging.session import get_connection
 
 
-async def publish(queue_name: str, payload: dict):
+async def publish(
+    exchange_name: str,
+    routing_key: str,
+    payload: dict,
+):
     connection = await get_connection()
+
     async with connection:
         channel = await connection.channel()
-        queue = await channel.declare_queue(queue_name)
-        await channel.default_exchange.publish(
-            aio_pika.Message(body=json.dumps(payload).encode()),
-            routing_key=queue.name,
+        exchange = await channel.declare_exchange(
+            exchange_name,
+            aio_pika.ExchangeType.TOPIC,
+        )
+        await exchange.publish(
+            aio_pika.Message(
+                body=json.dumps(payload).encode(),
+            ),
+            routing_key=routing_key,
         )
