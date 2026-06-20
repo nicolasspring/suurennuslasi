@@ -1,3 +1,4 @@
+import logging
 import tempfile
 from uuid import UUID
 
@@ -11,6 +12,8 @@ from suurennuslasi_domain.constants import IMPORT_JOB_STATUS
 from suurennuslasi_messaging.publisher import publish
 from suurennuslasi_storage.crud.storage import AsyncObjectStorage
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter(tags=["ingestion"])
 
 
@@ -19,15 +22,23 @@ async def ingest_file(
     file: UploadFile,
     session: AsyncSession = Depends(get_session),
 ) -> ImportJob:
+    logger.info(f"File {file.filename} received")
     job = await ImportJobRepository.create(session, ImportJobCreate())
+    logger.info(f"Import job with ID {job.id} created")
     object_key = f"uploads/{job.id}/instagram.zip"
     await AsyncObjectStorage.upload(object_key, file)
+    logger.info(f"File with key {object_key} uploaded to object storage")
     with tempfile.NamedTemporaryFile() as tmp:
         await AsyncObjectStorage.download_to_path(object_key, tmp.name)
     await AsyncObjectStorage.delete(object_key)
+    logger.info(f"File with key {object_key} deleted from object storage")
     await publish("import.created", {"job_id": str(job.id), "object_key": object_key})
+    logger.info(f"import.created message for job ID {job.id} published")
     await ImportJobRepository.update(
         session, ImportJobUpdate(id=job.id, status=IMPORT_JOB_STATUS.QUEUED)
+    )
+    logger.info(
+        f"Import job with ID {job.id} updated to status {IMPORT_JOB_STATUS.QUEUED}"
     )
     return job
 

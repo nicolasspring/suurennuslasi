@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -17,6 +18,11 @@ from suurennuslasi_db.crud.exceptions import (
 )
 from suurennuslasi_db.session.db import engine
 from suurennuslasi_storage.crud.storage import AsyncObjectStorage
+
+logging.basicConfig(
+    level=logging.INFO,
+    format=("%(asctime)s " "%(levelname)s " "[%(name)s] " "%(message)s"),
+)
 
 
 @asynccontextmanager
