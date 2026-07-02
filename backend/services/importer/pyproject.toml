@@ -14,6 +14,7 @@ suurennuslasi-domain = { path = "../../packages/domain", develop = true }
 suurennuslasi-storage = { path = "../../packages/storage", develop = true }
 suurennuslasi-events = { path = "../../packages/events", develop = true }
 suurennuslasi-messaging = { path = "../../packages/messaging", develop = true }
+ijson = "^3.5.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^26.5.1"
