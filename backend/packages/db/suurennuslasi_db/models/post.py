@@ -1,5 +1,5 @@
 from datetime import datetime
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from sqlmodel import Field, SQLModel
 
@@ -16,7 +16,7 @@ class PostBase(SQLModel):
 class Post(PostBase, table=True):
     __tablename__ = "post"
 
-    id: UUID = Field(primary_key=True)
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
 
 
 class PostCreate(PostBase):
