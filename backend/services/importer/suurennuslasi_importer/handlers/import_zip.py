@@ -63,7 +63,7 @@ async def save_posts(session: AsyncSession, file: ZipFile) -> int:
     root = Path(file)
     media = root / "your_instagram_activity" / "media"
     saved = 0
-    for json_file in media.rglob("posts_*.json"):
+    for json_file in media.glob("posts_*.json"):
         logger.info("Importing %s", json_file)
         with json_file.open("rb") as f:
             for post in ijson.items(f, "item"):
