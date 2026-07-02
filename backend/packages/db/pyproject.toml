@@ -14,6 +14,7 @@ sqlmodel = "^0.0.38"
 pydantic = "^2.13.4"
 pydantic-settings = "^2.14.1"
 suurennuslasi-domain = { path = "../../packages/domain", develop = true }
+asyncpg = "^0.31.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^26.5.1"
