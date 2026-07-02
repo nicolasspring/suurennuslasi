@@ -5,12 +5,13 @@ from sqlmodel import Field, SQLModel
 
 
 class PostBase(SQLModel):
-    instagram_id: str
-    caption: str
+    raw_json: str
+    json_data: dict
+    caption: str | None = None
     location: str | None = None
     latitude: float | None = None
     longitude: float | None = None
-    created_at: datetime
+    created_at: datetime | None = None
 
 
 class Post(PostBase, table=True):
@@ -25,6 +26,8 @@ class PostCreate(PostBase):
 
 class PostUpdate(SQLModel):
     id: UUID
+    raw_json: str | None = None
+    json_data: dict | None = None
     caption: str | None = None
     location: str | None = None
     latitude: float | None = None

@@ -4,3 +4,7 @@ class ImportJobNotFoundException(Exception):
 
 class PostNotFoundException(Exception):
     pass
+
+
+class MediaNotFoundException(Exception):
+    pass
