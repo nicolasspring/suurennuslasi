@@ -28,9 +28,6 @@ async def ingest_file(
     object_key = f"uploads/{job.id}/instagram.zip"
     await AsyncObjectStorage.upload(object_key, file)
     logger.info(f"File with key {object_key} uploaded to object storage")
-    with tempfile.NamedTemporaryFile() as tmp:
-        await AsyncObjectStorage.download_to_path(object_key, tmp.name)
-    await AsyncObjectStorage.delete(object_key)
     logger.info(f"File with key {object_key} deleted from object storage")
     payload = {"job_id": str(job.id), "object_key": object_key}
     await publish(
