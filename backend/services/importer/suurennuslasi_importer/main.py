@@ -10,13 +10,16 @@ logging.basicConfig(
     format=("%(asctime)s " "%(levelname)s " "[%(name)s] " "%(message)s"),
 )
 
+handlers = {
+    "import.created": consume_import_created,
+}
+
 
 async def main() -> None:
     await subscribe(
         exchange_name="imports",
-        queue_name="importer.imports",
-        routing_key="import.created",
-        callback=consume_import_created,
+        queue_name="importer",
+        handlers=handlers,
     )
 
 

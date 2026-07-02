@@ -8,8 +8,7 @@ from suurennuslasi_messaging.session import get_connection
 async def subscribe(
     exchange_name: str,
     queue_name: str,
-    routing_key: str,
-    callback,
+    handlers: dict[str, callable],
 ):
     connection = await get_connection()
     async with connection:
@@ -21,9 +20,10 @@ async def subscribe(
         queue = await channel.declare_queue(
             queue_name,
         )
-        await queue.bind(
-            exchange,
-            routing_key=routing_key,
-        )
+        for routing_key, callback in handlers.items():
+            await queue.bind(
+                exchange,
+                routing_key=routing_key,
+            )
         await queue.consume(callback)
         await asyncio.Future()
