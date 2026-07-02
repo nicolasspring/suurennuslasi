@@ -76,7 +76,6 @@ async def save_posts(session: AsyncSession, file: ZipFile) -> int:
                     session,
                     PostCreate(
                         raw_json=raw_json,
-                        json_data=post,
                     ),
                 )
                 # publish import created event
