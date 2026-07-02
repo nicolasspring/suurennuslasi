@@ -12,6 +12,7 @@ from suurennuslasi_api.exceptions.handlers import (
 from suurennuslasi_api.routes.ingestion import router as ingestion_router
 from suurennuslasi_api.routes.posts import router as posts_router
 
+import suurennuslasi_db.models
 from suurennuslasi_db.crud.exceptions import (
     ImportJobNotFoundException,
     PostNotFoundException,
