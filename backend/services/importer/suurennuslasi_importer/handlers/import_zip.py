@@ -12,7 +12,7 @@ from suurennuslasi_db.crud.media import MediaRepository
 from suurennuslasi_db.crud.post import PostRepository
 from suurennuslasi_db.models.media import MediaCreate
 from suurennuslasi_db.models.post import PostCreate
-from suurennuslasi_db.session.db import get_session
+from suurennuslasi_db.session.db import AsyncSessionLocal
 from suurennuslasi_events.events.models import ImportCreated
 from suurennuslasi_storage.crud.storage import AsyncObjectStorage
 
@@ -20,16 +20,16 @@ logger = logging.getLogger(__name__)
 
 
 async def import_zip(event: ImportCreated):
-    session = await get_session()
-    logger.info(
-        f"Importing zip file for job {event.job_id} with object key {event.object_key}"
-    )
-    with tempfile.NamedTemporaryFile() as tmp:
-        await AsyncObjectStorage.download_to_path(event.object_key, tmp.name)
+    async with AsyncSessionLocal() as session:
+        logger.info(
+            f"Importing zip file for job {event.job_id} with object key {event.object_key}"
+        )
+        with tempfile.NamedTemporaryFile() as tmp:
+            await AsyncObjectStorage.download_to_path(event.object_key, tmp.name)
 
-        with ZipFile(tmp.name) as archive:
-            media_saved = await save_media(session, archive)
-            posts_saved = await save_posts(session, archive)
+            with ZipFile(tmp.name) as archive:
+                media_saved = await save_media(session, archive)
+                posts_saved = await save_posts(session, archive)
     logger.info(
         f"Extracted {media_saved} media items and {posts_saved} posts for job {event.job_id}"
     )
