@@ -9,6 +9,7 @@ async def subscribe(
     exchange_name: str,
     queue_name: str,
     handlers: dict[str, callable],
+    dispatch: callable,
 ):
     connection = await get_connection()
     async with connection:
@@ -20,10 +21,10 @@ async def subscribe(
         queue = await channel.declare_queue(
             queue_name,
         )
-        for routing_key, callback in handlers.items():
+        for routing_key, _ in handlers.items():
             await queue.bind(
                 exchange,
                 routing_key=routing_key,
             )
-        await queue.consume(callback)
+        await queue.consume(dispatch)
         await asyncio.Future()
