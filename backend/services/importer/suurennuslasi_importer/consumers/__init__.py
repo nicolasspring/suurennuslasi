@@ -1,1 +1,1 @@
-from .consumers import consume_import_created
+from .consumers import consume_import_created, consume_post_extracted

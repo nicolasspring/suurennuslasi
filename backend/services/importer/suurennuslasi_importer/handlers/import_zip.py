@@ -3,6 +3,7 @@ import logging
 import mimetypes
 import os
 import tempfile
+from datetime import datetime
 from zipfile import Path, ZipFile
 
 import ijson
@@ -11,12 +12,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from suurennuslasi_db.crud.job import ImportJobRepository
 from suurennuslasi_db.crud.media import MediaRepository
 from suurennuslasi_db.crud.post import PostRepository
-from suurennuslasi_db.models.job import ImportJob, ImportJobCreate, ImportJobUpdate
+from suurennuslasi_db.models.job import ImportJobUpdate
 from suurennuslasi_db.models.media import MediaCreate
 from suurennuslasi_db.models.post import PostCreate
 from suurennuslasi_db.session.db import AsyncSessionLocal
 from suurennuslasi_domain.constants.constants import IMPORT_JOB_STATUS
 from suurennuslasi_events.events.models import ImportCreated
+from suurennuslasi_messaging.publisher.publisher import publish
 from suurennuslasi_storage.crud.storage import AsyncObjectStorage
 
 logger = logging.getLogger(__name__)
@@ -26,7 +28,12 @@ async def import_zip(event: ImportCreated):
     async with AsyncSessionLocal() as session:
         await ImportJobRepository.update(
             session,
-            ImportJobUpdate(id=event.job_id, status=IMPORT_JOB_STATUS.EXTRACTING),
+            ImportJobUpdate(
+                id=event.job_id,
+                status=IMPORT_JOB_STATUS.EXTRACTING,
+                started_at=datetime.now(),
+                processed_posts=0,
+            ),
         )
         logger.info(
             f"Importing zip file for job {event.job_id} with object key {event.object_key}"
@@ -36,9 +43,16 @@ async def import_zip(event: ImportCreated):
 
             with ZipFile(tmp.name) as archive:
                 media_saved = await save_media(session, archive)
-                posts_saved = await save_posts(session, archive)
+                posts_saved = await save_posts(session, event, archive)
     logger.info(
         f"Extracted {media_saved} media items and {posts_saved} posts for job {event.job_id}"
+    )
+    await ImportJobRepository.update(
+        session,
+        ImportJobUpdate(
+            id=event.job_id,
+            total_posts=posts_saved,
+        ),
     )
     await AsyncObjectStorage.delete(event.object_key)
     logger.info(f"Deleted zip file with object key {event.object_key} from storage")
@@ -66,7 +80,7 @@ async def save_media(session: AsyncSession, file: ZipFile) -> int:
     return i + 1
 
 
-async def save_posts(session: AsyncSession, file: ZipFile) -> int:
+async def save_posts(session: AsyncSession, event: ImportCreated, file: ZipFile) -> int:
     root = Path(file)
     media = root / "your_instagram_activity" / "media"
     saved = 0
@@ -79,12 +93,17 @@ async def save_posts(session: AsyncSession, file: ZipFile) -> int:
                     ensure_ascii=False,
                     separators=(",", ":"),
                 )
-                await PostRepository.create(
+                post = await PostRepository.create(
                     session,
                     PostCreate(
                         raw_json=raw_json,
                     ),
                 )
-                # publish import created event
+                payload = {"job_id": str(event.job_id), "post_id": str(post.id)}
+                await publish(
+                    exchange_name="imports",
+                    routing_key="post.extracted",
+                    payload=payload,
+                )
                 saved += 1
     return saved
