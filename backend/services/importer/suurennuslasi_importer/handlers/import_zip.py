@@ -17,6 +17,7 @@ from suurennuslasi_db.models.media import MediaCreate
 from suurennuslasi_db.models.post import PostCreate
 from suurennuslasi_db.session.db import AsyncSessionLocal
 from suurennuslasi_domain.constants.constants import IMPORT_JOB_STATUS
+from suurennuslasi_domain.encoding.mojibake import fix_mojibake
 from suurennuslasi_events.events.models import ImportCreated
 from suurennuslasi_messaging.publisher.publisher import publish
 from suurennuslasi_storage.crud.storage import AsyncObjectStorage
@@ -93,6 +94,8 @@ async def save_posts(session: AsyncSession, event: ImportCreated, file: ZipFile)
                     ensure_ascii=False,
                     separators=(",", ":"),
                 )
+                # instagram exports currently have mojibake in the json files
+                raw_json = fix_mojibake(raw_json)
                 post = await PostRepository.create(
                     session,
                     PostCreate(
