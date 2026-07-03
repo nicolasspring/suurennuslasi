@@ -102,7 +102,7 @@ async def save_posts(session: AsyncSession, event: ImportCreated, file: ZipFile)
                 payload = {"job_id": str(event.job_id), "post_id": str(post.id)}
                 await publish(
                     exchange_name="imports",
-                    routing_key="post.extracted",
+                    routing_key="import.post_extracted",
                     payload=payload,
                 )
                 saved += 1

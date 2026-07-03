@@ -21,7 +21,7 @@ register_mime_types()
 
 handlers = {
     "import.created": consume_import_created,
-    "post.extracted": consume_post_extracted,
+    "import.post_extracted": consume_post_extracted,
 }
 
 
