@@ -36,6 +36,7 @@ class ImportJobUpdate(SQLModel):
     status: str | None = None
     progress: float | None = None
     created_at: datetime | None = None
+    last_edited: datetime | None = None
     started_at: datetime | None = None
     finished_at: datetime | None = None
     error_message: str | None = None

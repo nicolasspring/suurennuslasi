@@ -1,4 +1,5 @@
 import typing as t
+from datetime import datetime
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -34,6 +35,8 @@ class ImportJobRepository(BaseRepository):
 
     @classmethod
     async def update(cls, session: AsyncSession, item: ImportJobUpdate) -> ImportJob:
+        if not item.last_edited:
+            item.last_edited = datetime.now()
         return await super().update(session, item)
 
     @classmethod
