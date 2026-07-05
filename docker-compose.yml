@@ -33,7 +33,11 @@ services:
       context: ./backend
       dockerfile: services/importer/Dockerfile
     working_dir: /app/services/importer
-    command: python -m suurennuslasi_importer.main
+    command: >
+      watchfiles
+      --filter python
+      "python -m suurennuslasi_importer.main"
+      /app
     volumes:
       - ./backend:/app
     env_file:
