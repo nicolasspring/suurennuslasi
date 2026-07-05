@@ -5,11 +5,9 @@ from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from suurennuslasi_db.crud.job import ImportJobRepository
-from suurennuslasi_db.crud.media import MediaRepository
 from suurennuslasi_db.crud.post import PostRepository
 from suurennuslasi_db.models.job import ImportJobUpdate
-from suurennuslasi_db.models.media import MediaCreate
-from suurennuslasi_db.models.post import PostCreate, PostUpdate
+from suurennuslasi_db.models.post import PostUpdate
 from suurennuslasi_db.session.db import AsyncSessionLocal
 from suurennuslasi_domain.constants.constants import IMPORT_JOB_STATUS
 from suurennuslasi_events.events.models import PostExtracted
