@@ -93,6 +93,7 @@ async def save_posts(session: AsyncSession, event: ImportCreated, file: ZipFile)
                     post,
                     ensure_ascii=False,
                     separators=(",", ":"),
+                    default=str,
                 )
                 # instagram exports currently have mojibake in the json files
                 raw_json = fix_mojibake(raw_json)
