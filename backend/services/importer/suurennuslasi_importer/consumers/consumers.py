@@ -1,5 +1,5 @@
-from suurennuslasi_importer.handlers.parse_post import parse_post
 from suurennuslasi_importer.handlers.import_zip import import_zip
+from suurennuslasi_importer.handlers.parse_post import parse_post
 
 from suurennuslasi_events.events.models import ImportCreated, PostExtracted
 
