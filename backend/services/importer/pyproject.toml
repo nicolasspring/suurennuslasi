@@ -20,6 +20,7 @@ ijson = "^3.5.0"
 black = "^26.5.1"
 isort = "^8.0.1"
 pytest = "^9.0.3"
+watchfiles = "^1.2.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
