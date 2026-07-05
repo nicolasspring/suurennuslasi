@@ -24,6 +24,12 @@ async def parse_post(event: PostExtracted):
         logger.info(f"Parsing post {event.post_id} for job {event.job_id}")
         post = await PostRepository.read(session, event.post_id)
         post_json = json.loads(post.raw_json)
+        if not post_json.get("title") or not post_json.get("creation_timestamp"):
+            logger.warning(
+                f"Post {event.post_id} for job {event.job_id} is missing title or creation_timestamp. Deleting..."
+            )
+            await PostRepository.delete(session, event.post_id)
+            return
         await PostRepository.update(
             session,
             PostUpdate(
