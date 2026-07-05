@@ -28,7 +28,6 @@ async def ingest_file(
     object_key = f"uploads/{job.id}/instagram.zip"
     await AsyncObjectStorage.upload(object_key, file)
     logger.info(f"File with key {object_key} uploaded to object storage")
-    logger.info(f"File with key {object_key} deleted from object storage")
     payload = {"job_id": str(job.id), "object_key": object_key}
     await publish(
         exchange_name="imports",
