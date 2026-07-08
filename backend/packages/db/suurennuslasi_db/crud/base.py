@@ -3,6 +3,7 @@ from abc import ABC
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm.interfaces import ORMOption
 from sqlmodel import SQLModel, select
 
 T = t.TypeVar("T", bound=SQLModel)
@@ -10,6 +11,7 @@ T = t.TypeVar("T", bound=SQLModel)
 
 class BaseRepository(ABC):
     model: t.Type[T]
+    load_options: tuple[ORMOption, ...] = ()
     exception_factory: t.Callable[[str, UUID], Exception] = lambda x, y: ValueError(
         f"{x} with ID {y} not found."
     )
@@ -28,7 +30,7 @@ class BaseRepository(ABC):
 
     @classmethod
     async def _get_or_raise(cls, session: AsyncSession, id: UUID) -> T:
-        db_item = await session.get(cls.model, id)
+        db_item = await session.get(cls.model, id, options=[*cls.load_options])
         if not db_item:
             raise cls.exception_factory(cls.model.__name__, id)
         return db_item
@@ -60,6 +62,8 @@ class BaseRepository(ABC):
             filter_args.append(getattr(cls.model, key) == value)
         stmt = select(cls.model)
         stmt = stmt.where(*filter_args)
+        if cls.load_options:
+            stmt = stmt.options(*cls.load_options)
         result = await session.execute(stmt)
         return result.scalars().all()
 

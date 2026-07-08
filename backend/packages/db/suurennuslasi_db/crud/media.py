@@ -2,6 +2,7 @@ import typing as t
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from suurennuslasi_db.crud.base import BaseRepository
 from suurennuslasi_db.crud.exceptions import MediaNotFoundException
@@ -10,6 +11,7 @@ from suurennuslasi_db.models.media import Media, MediaCreate, MediaUpdate
 
 class MediaRepository(BaseRepository):
     model = Media
+    load_options = (selectinload(Media.post),)
     exception_factory: t.Callable[[str, UUID], Exception] = (
         lambda x, y: MediaNotFoundException(f"{x} with ID {y} not found.")
     )

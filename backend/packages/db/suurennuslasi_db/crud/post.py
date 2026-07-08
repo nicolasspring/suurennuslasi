@@ -2,6 +2,7 @@ import typing as t
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from suurennuslasi_db.crud.base import BaseRepository
 from suurennuslasi_db.crud.exceptions import PostNotFoundException
@@ -12,6 +13,7 @@ from suurennuslasi_db.models.post import Post, PostCreate, PostUpdate
 
 class PostRepository(BaseRepository):
     model = Post
+    load_options = (selectinload(Post.media),)
     exception_factory: t.Callable[[str, UUID], Exception] = (
         lambda x, y: PostNotFoundException(f"{x} with ID {y} not found.")
     )

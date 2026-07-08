@@ -11,6 +11,7 @@ from suurennuslasi_db.models.job import ImportJob, ImportJobCreate, ImportJobUpd
 
 class ImportJobRepository(BaseRepository):
     model = ImportJob
+    load_options = ()
     exception_factory: t.Callable[[str, UUID], Exception] = (
         lambda x, y: ImportJobNotFoundException(f"{x} with ID {y} not found.")
     )
