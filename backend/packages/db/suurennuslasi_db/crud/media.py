@@ -33,8 +33,19 @@ class MediaRepository(BaseRepository):
         return await super().read_all(session, **filters)
 
     @classmethod
-    async def update(cls, session: AsyncSession, item: MediaUpdate) -> Media:
-        return await super().update(session, item)
+    async def update(
+        cls,
+        session: AsyncSession,
+        item: MediaUpdate,
+        exclude: list[str] | None = None,
+        additional: dict[str, t.Any] | None = None,
+    ) -> Media:
+        return await super().update(
+            session,
+            item,
+            exclude=exclude,
+            additional=additional,
+        )
 
     @classmethod
     async def delete(cls, session: AsyncSession, id: UUID) -> Media:

@@ -5,6 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from suurennuslasi_db.crud.base import BaseRepository
 from suurennuslasi_db.crud.exceptions import PostNotFoundException
+from suurennuslasi_db.crud.media import MediaRepository
+from suurennuslasi_db.models.media import MediaUpdate
 from suurennuslasi_db.models.post import Post, PostCreate, PostUpdate
 
 
@@ -22,7 +24,20 @@ class PostRepository(BaseRepository):
         exclude: t.Optional[list[str]] = None,
         additional: t.Optional[dict[str, t.Any]] = None,
     ) -> Post:
-        return await super().create(session, item, exclude, additional)
+        post = await super().create(
+            session,
+            item,
+            exclude=["media", *(exclude or [])],
+            additional=additional,
+        )
+        if item.media:
+            for i, media in enumerate(item.media):
+                await MediaRepository.update(
+                    session,
+                    MediaUpdate(id=media.id, position=i),
+                    additional={"post_id": post.id},
+                )
+        return post
 
     @classmethod
     async def read(cls, session: AsyncSession, id: UUID) -> Post:
@@ -33,8 +48,23 @@ class PostRepository(BaseRepository):
         return await super().read_all(session, **filters)
 
     @classmethod
-    async def update(cls, session: AsyncSession, item: PostUpdate) -> Post:
-        return await super().update(session, item)
+    async def update(
+        cls,
+        session: AsyncSession,
+        item: PostUpdate,
+        exclude: list[str] | None = None,
+        additional: dict[str, t.Any] | None = None,
+    ) -> Post:
+        if item.media:
+            for i, media in enumerate(item.media):
+                await MediaRepository.update(
+                    session,
+                    MediaUpdate(id=media.id, position=i),
+                    additional={"post_id": item.id},
+                )
+        return await super().update(
+            session, item, exclude=["media", *(exclude or [])], additional=additional
+        )
 
     @classmethod
     async def delete(cls, session: AsyncSession, id: UUID) -> Post:

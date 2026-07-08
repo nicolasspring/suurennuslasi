@@ -21,7 +21,9 @@ class BaseRepository(ABC):
         exclude: t.Optional[list[str]] = NotImplemented,
         additional: t.Optional[dict[str, t.Any]] = NotImplemented,
     ) -> T:
-        item_data = item.model_dump(exclude=exclude or [], exclude_unset=True)
+        item_data = item.model_dump(
+            exclude=exclude or [], exclude_unset=True, exclude_none=True
+        )
         return cls.model(**item_data, **additional or {})
 
     @classmethod
@@ -62,9 +64,19 @@ class BaseRepository(ABC):
         return result.scalars().all()
 
     @classmethod
-    async def update(cls, session: AsyncSession, item: T) -> t.Optional[T]:
+    async def update(
+        cls,
+        session: AsyncSession,
+        item,
+        exclude: list[str] | None = None,
+        additional: dict[str, t.Any] | None = None,
+    ):
         db_item = await cls._get_or_raise(session, item.id)
-        item_data = item.model_dump(exclude_unset=True)
+        item_data = item.model_dump(
+            exclude=set(exclude or []),
+            exclude_unset=True,
+        )
+        item_data.update(additional or {})
         for key, value in item_data.items():
             setattr(db_item, key, value)
         await session.commit()

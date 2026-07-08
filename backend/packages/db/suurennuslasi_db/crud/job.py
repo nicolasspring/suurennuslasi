@@ -34,10 +34,18 @@ class ImportJobRepository(BaseRepository):
         return await super().read_all(session, **filters)
 
     @classmethod
-    async def update(cls, session: AsyncSession, item: ImportJobUpdate) -> ImportJob:
+    async def update(
+        cls,
+        session: AsyncSession,
+        item: ImportJobUpdate,
+        exclude: list[str] | None = None,
+        additional: dict[str, t.Any] | None = None,
+    ) -> ImportJob:
         if not item.last_edited:
             item.last_edited = datetime.now()
-        return await super().update(session, item)
+        return await super().update(
+            session, item, exclude=exclude, additional=additional
+        )
 
     @classmethod
     async def delete(cls, session: AsyncSession, id: UUID) -> ImportJob:
