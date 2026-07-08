@@ -1,7 +1,11 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
+
+if TYPE_CHECKING:
+    from suurennuslasi_db.models.media import Media, MediaCreate, MediaUpdate
 
 
 class PostBase(SQLModel):
@@ -17,10 +21,18 @@ class Post(PostBase, table=True):
     __tablename__ = "post"
 
     id: UUID = Field(default_factory=uuid4, primary_key=True)
+    media: list["Media"] = Relationship(
+        back_populates="post",
+        sa_relationship_kwargs={
+            "order_by": "Media.position",
+            "cascade": "all, delete-orphan",
+            "passive_deletes": True,
+        },
+    )
 
 
 class PostCreate(PostBase):
-    pass
+    media: list["MediaCreate"] = Field(default_factory=list)
 
 
 class PostUpdate(SQLModel):
@@ -31,3 +43,12 @@ class PostUpdate(SQLModel):
     latitude: float | None = None
     longitude: float | None = None
     created_at: datetime | None = None
+    media: list["MediaUpdate"] | None = None
+
+
+# Rebuild the models to ensure relationships are properly initialized
+from suurennuslasi_db.models.media import Media, MediaCreate, MediaUpdate
+
+Post.model_rebuild()
+PostCreate.model_rebuild()
+PostUpdate.model_rebuild()
