@@ -62,22 +62,21 @@ async def import_zip(event: ImportCreated):
 async def save_media(session: AsyncSession, file: ZipFile) -> int:
     root = Path(file)
     media = root / "media" / "posts"
-    for i, image in enumerate(media.rglob("*")):
-        if image.suffix.lower() in {".jpg", ".jpeg", ".webp"}:
-            with image.open("rb") as f:
-                object_key = f"images/{image.name}"
-                await AsyncObjectStorage.upload(object_key, f)
-                f.seek(0, os.SEEK_END)
-                await MediaRepository.create(
-                    session,
-                    MediaCreate(
-                        filename=image.name,
-                        mime_type=mimetypes.guess_type(image.name)[0],
-                        object_key=object_key,
-                        size=f.tell(),
-                    ),
-                )
-            logger.info(f"Imported media {image.name} with object key {object_key}")
+    for i, image in enumerate(media.glob("**.*")):
+        with image.open("rb") as f:
+            object_key = f"images/{image.name}"
+            await AsyncObjectStorage.upload(object_key, f)
+            f.seek(0, os.SEEK_END)
+            await MediaRepository.create(
+                session,
+                MediaCreate(
+                    filename=image.name,
+                    mime_type=mimetypes.guess_type(image.name)[0],
+                    object_key=object_key,
+                    size=f.tell(),
+                ),
+            )
+        logger.info(f"Imported media {image.name} with object key {object_key}")
     return i + 1
 
 
