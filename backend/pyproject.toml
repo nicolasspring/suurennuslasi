@@ -1,3 +1,22 @@
+[project]
+name = "suurennuslasi-backend"
+requires-python = ">=3.12,<4"
+dynamic = [ "dependencies" ]
+
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.12,<4"
+suurennuslasi-db = { path = "packages/db", develop = true }
+suurennuslasi-domain = { path = "packages/domain", develop = true }
+suurennuslasi-events = { path = "packages/events", develop = true }
+suurennuslasi-messaging = { path = "packages/messaging", develop = true }
+suurennuslasi-storage = { path = "packages/storage", develop = true }
+suurennuslasi-api = { path = "services/api", develop = true }
+suurennuslasi-importer = { path = "services/importer", develop = true }
+
+
 [tool.black]
 target-version = ["py312"]
 
