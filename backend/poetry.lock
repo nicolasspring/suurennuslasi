@@ -1868,6 +1868,26 @@ type = "directory"
 url = "packages/events"
 
 [[package]]
+name = "suurennuslasi-geoparser"
+version = "0.1.0"
+description = ""
+optional = false
+python-versions = ">=3.12,<4"
+groups = ["main"]
+files = []
+develop = true
+
+[package.dependencies]
+suurennuslasi-db = {path = "../../packages/db", develop = true}
+suurennuslasi-domain = {path = "../../packages/domain", develop = true}
+suurennuslasi-events = {path = "../../packages/events", develop = true}
+suurennuslasi-messaging = {path = "../../packages/messaging", develop = true}
+
+[package.source]
+type = "directory"
+url = "services/geoparser"
+
+[[package]]
 name = "suurennuslasi-importer"
 version = "0.1.0"
 description = ""
@@ -2323,4 +2343,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<4"
-content-hash = "5466e4fe126286cef8c3661e4396026d85b5f1d386dd7a3f1358fcff97f44f77"
+content-hash = "1373d55a0c33456c523566cc67c4f2a742ebfb6d906c5560b2c2fad170651e68"

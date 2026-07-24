@@ -14,6 +14,7 @@ suurennuslasi-events = { path = "packages/events", develop = true }
 suurennuslasi-messaging = { path = "packages/messaging", develop = true }
 suurennuslasi-storage = { path = "packages/storage", develop = true }
 suurennuslasi-api = { path = "services/api", develop = true }
+suurennuslasi-geoparser = { path = "services/geoparser", develop = true }
 suurennuslasi-importer = { path = "services/importer", develop = true }
 
 [tool.poetry.group.dev.dependencies]
