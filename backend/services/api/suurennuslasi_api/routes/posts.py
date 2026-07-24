@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,3 +15,11 @@ async def get_posts(
     session: AsyncSession = Depends(get_session),
 ) -> list[Post]:
     return await PostRepository.read_all(session)
+
+
+@router.get("/posts/{post_id}")
+async def get_post(
+    post_id: UUID,
+    session: AsyncSession = Depends(get_session),
+) -> Post:
+    return await PostRepository.read(session, post_id)
