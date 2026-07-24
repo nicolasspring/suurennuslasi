@@ -42,3 +42,14 @@ class ImportJobUpdate(SQLModel):
     error_message: str | None = None
     total_posts: int | None = None
     processed_posts: int | None = None
+
+
+class ImportJobRead(SQLModel):
+    id: UUID
+    status: IMPORT_JOB_STATUS
+    progress: float | None = None
+    created_at: datetime
+    last_edited: datetime
+    started_at: datetime | None = None
+    finished_at: datetime | None = None
+    error_message: str | None = None
