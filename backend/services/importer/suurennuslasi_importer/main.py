@@ -1,6 +1,5 @@
 import asyncio
 import logging
-import mimetypes
 
 from suurennuslasi_importer.consumers import (
     consume_import_created,
