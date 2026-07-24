@@ -30,7 +30,7 @@ class BaseRepository(ABC):
 
     @classmethod
     async def _get_or_raise(cls, session: AsyncSession, id: UUID) -> T:
-        db_item = await session.get(cls.model, id, options=[*cls.load_options])
+        db_item = await session.get(cls.model, id, options=cls.load_options)
         if not db_item:
             raise cls.exception_factory(cls.model.__name__, id)
         return db_item

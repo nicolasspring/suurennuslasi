@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
-    from suurennuslasi_db.models.media import Media, MediaCreate, MediaUpdate
+    from suurennuslasi_db.models.media import Media, MediaCreate, MediaRead, MediaUpdate
 
 
 class PostBase(SQLModel):
@@ -46,9 +46,20 @@ class PostUpdate(SQLModel):
     media: list["MediaUpdate"] | None = None
 
 
+class PostRead(SQLModel):
+    id: UUID
+    caption: str | None = None
+    location: str | None = None
+    latitude: float | None = None
+    longitude: float | None = None
+    created_at: datetime | None = None
+    media: list["MediaRead"] = Field(default_factory=list)
+
+
 # Rebuild the models to ensure relationships are properly initialized
-from suurennuslasi_db.models.media import Media, MediaCreate, MediaUpdate
+from suurennuslasi_db.models.media import Media, MediaCreate, MediaRead, MediaUpdate
 
 Post.model_rebuild()
 PostCreate.model_rebuild()
 PostUpdate.model_rebuild()
+PostRead.model_rebuild()

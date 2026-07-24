@@ -49,6 +49,18 @@ class MediaUpdate(SQLModel):
     position: int | None = None
 
 
+class MediaRead(SQLModel):
+    id: UUID
+    filename: str
+    mime_type: str
+    size: int
+    object_key: str
+    original_uri: str | None = None
+    title: str | None = None
+    created_at: datetime | None = None
+    position: int | None = None
+
+
 # Rebuild the models to ensure relationships are properly initialized
 from suurennuslasi_db.models.post import Post
 
