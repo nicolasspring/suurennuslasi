@@ -51,6 +51,28 @@ services:
       db:
         condition: service_healthy
 
+  geoparser:
+    build:
+      context: ./backend
+      dockerfile: services/geoparser/Dockerfile
+    working_dir: /app/services/geoparser
+    command: >
+      watchfiles
+      --filter python
+      "python -m suurennuslasi_geoparser.main"
+      /app
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      minio:
+        condition: service_started
+      db:
+        condition: service_healthy
+
   db:
     image: postgis/postgis
     restart: always
