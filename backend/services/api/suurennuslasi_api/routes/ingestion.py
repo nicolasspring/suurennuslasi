@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from suurennuslasi_db.crud.job import ImportJobRepository
-from suurennuslasi_db.models.job import ImportJob, ImportJobCreate, ImportJobUpdate
+from suurennuslasi_db.models.job import ImportJobCreate, ImportJobRead, ImportJobUpdate
 from suurennuslasi_db.session.db import get_session
 from suurennuslasi_domain.constants import IMPORT_JOB_STATUS
 from suurennuslasi_messaging.publisher import publish
@@ -21,7 +21,7 @@ router = APIRouter(tags=["ingestion"])
 async def ingest_file(
     file: UploadFile,
     session: AsyncSession = Depends(get_session),
-) -> ImportJob:
+) -> ImportJobRead:
     logger.info(f"File {file.filename} received")
     job = await ImportJobRepository.create(session, ImportJobCreate())
     logger.info(f"Import job with ID {job.id} created")
@@ -48,5 +48,5 @@ async def ingest_file(
 async def get_ingestion_job_status(
     job_id: UUID,
     session: AsyncSession = Depends(get_session),
-) -> ImportJob:
+) -> ImportJobRead:
     return await ImportJobRepository.read(session, job_id)

@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from suurennuslasi_db.crud.post import PostRepository
-from suurennuslasi_db.models.post import Post
+from suurennuslasi_db.models.post import PostRead
 from suurennuslasi_db.session.db import get_session
 
 router = APIRouter(tags=["posts"])
@@ -13,7 +13,7 @@ router = APIRouter(tags=["posts"])
 @router.get("/posts")
 async def get_posts(
     session: AsyncSession = Depends(get_session),
-) -> list[Post]:
+) -> list[PostRead]:
     return await PostRepository.read_all(session)
 
 
@@ -21,5 +21,5 @@ async def get_posts(
 async def get_post(
     post_id: UUID,
     session: AsyncSession = Depends(get_session),
-) -> Post:
+) -> PostRead:
     return await PostRepository.read(session, post_id)
