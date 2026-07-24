@@ -41,6 +41,7 @@ sections = [
 ]
 known_services = [
     "suurennuslasi_api",
+    "suurennuslasi_geoparser",
     "suurennuslasi_importer",
 ]
 known_packages = [
