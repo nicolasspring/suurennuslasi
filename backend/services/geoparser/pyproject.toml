@@ -1,0 +1,25 @@
+[project]
+name = "suurennuslasi-geoparser"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "nicolasspring",email = "springn.ch@gmail.com"}
+]
+requires-python = ">=3.12,<4"
+dynamic = [ "dependencies" ]
+
+[tool.poetry.dependencies]
+suurennuslasi-db = { path = "../../packages/db", develop = true }
+suurennuslasi-domain = { path = "../../packages/domain", develop = true }
+suurennuslasi-events = { path = "../../packages/events", develop = true }
+suurennuslasi-messaging = { path = "../../packages/messaging", develop = true }
+
+[tool.poetry.group.dev.dependencies]
+black = "^26.5.1"
+isort = "^8.0.1"
+pytest = "^9.0.3"
+watchfiles = "^1.2.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
