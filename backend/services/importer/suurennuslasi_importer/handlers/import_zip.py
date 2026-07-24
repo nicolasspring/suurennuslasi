@@ -102,6 +102,7 @@ async def save_posts(session: AsyncSession, event: ImportCreated, file: ZipFile)
                         raw_json=raw_json,
                     ),
                 )
+                logger.info(f"Imported post {post.id} for job {event.job_id}")
                 payload = {"job_id": str(event.job_id), "post_id": str(post.id)}
                 await publish(
                     exchange_name="imports",
