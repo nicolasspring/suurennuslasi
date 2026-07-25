@@ -11,3 +11,8 @@ class ImportCreated(BaseModel):
 class PostExtracted(BaseModel):
     job_id: UUID
     post_id: UUID
+
+
+class PostParsed(BaseModel):
+    job_id: UUID
+    post_id: UUID
