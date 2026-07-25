@@ -213,6 +213,21 @@ files = [
 ]
 
 [[package]]
+name = "en_core_web_sm"
+version = "3.8.0"
+description = "English pipeline optimized for CPU. Components: tok2vec, tagger, parser, senter, ner, attribute_ruler, lemmatizer."
+optional = false
+python-versions = "*"
+groups = ["dev"]
+files = [
+    {file = "en_core_web_sm-3.8.0.tar.gz", hash = "sha256:14a2f31bc476af87019819ea8c9948fabdfd473a442edd6b1cba62bf0c2c0f55"},
+]
+
+[package.source]
+type = "url"
+url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0.tar.gz"
+
+[[package]]
 name = "greenlet"
 version = "3.5.3"
 description = "Lightweight in-process concurrent programming"
@@ -1339,6 +1354,21 @@ files = [
 anyio = ">=3.0.0"
 
 [[package]]
+name = "xx_sent_ud_sm"
+version = "3.8.0"
+description = "Multi-language pipeline optimized for CPU. Components: senter."
+optional = false
+python-versions = "*"
+groups = ["dev"]
+files = [
+    {file = "xx_sent_ud_sm-3.8.0.tar.gz", hash = "sha256:d895d6ce9e1a70139fa9096e2d2809d8d20a306e4e3d5ef0beb3d66d87a09edf"},
+]
+
+[package.source]
+type = "url"
+url = "https://github.com/explosion/spacy-models/releases/download/xx_sent_ud_sm-3.8.0/xx_sent_ud_sm-3.8.0.tar.gz"
+
+[[package]]
 name = "yarl"
 version = "1.24.2"
 description = "Yet another URL library"
@@ -1460,4 +1490,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<4"
-content-hash = "796a6964ab165a832419ab2f0c2571f4f6b1be6ec25c123efa5694ceaee83a36"
+content-hash = "84cad72389065844a7428f386478f8fef010ca71ff8210246aa4f37229cc4538"

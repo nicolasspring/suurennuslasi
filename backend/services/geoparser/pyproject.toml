@@ -19,6 +19,8 @@ black = "^26.5.1"
 isort = "^8.0.1"
 pytest = "^9.0.3"
 watchfiles = "^1.2.0"
+en-core-web-sm = {url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0.tar.gz"}
+xx-sent-ud-sm = {url = "https://github.com/explosion/spacy-models/releases/download/xx_sent_ud_sm-3.8.0/xx_sent_ud_sm-3.8.0.tar.gz"}
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
