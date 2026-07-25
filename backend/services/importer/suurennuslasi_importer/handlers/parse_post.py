@@ -13,6 +13,7 @@ from suurennuslasi_db.models.post import PostUpdate
 from suurennuslasi_db.session.db import AsyncSessionLocal
 from suurennuslasi_domain.constants.constants import IMPORT_JOB_STATUS
 from suurennuslasi_events.events.models import PostExtracted
+from suurennuslasi_messaging.publisher import publish
 
 logger = logging.getLogger(__name__)
 
@@ -73,6 +74,12 @@ async def parse_post(event: PostExtracted):
                 ),
                 media=post_media,
             ),
+        )
+        payload = {"job_id": str(event.job_id), "post_id": str(post.id)}
+        await publish(
+            exchange_name="imports",
+            routing_key="import.post_parsed",
+            payload=payload,
         )
         logger.info(
             f"Post {event.post_id} for job {event.job_id} updated and ready for geoparsing"
