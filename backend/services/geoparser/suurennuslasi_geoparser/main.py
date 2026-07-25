@@ -1,6 +1,8 @@
 import asyncio
 import logging
 
+from suurennuslasi_geoparser.consumers import consume_post_parsed
+
 from suurennuslasi_messaging.subscriber import subscribe
 
 logging.basicConfig(
@@ -10,7 +12,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-handlers = {}
+handlers = {"import.post_parsed": consume_post_parsed}
 
 
 async def dispatch(message):
