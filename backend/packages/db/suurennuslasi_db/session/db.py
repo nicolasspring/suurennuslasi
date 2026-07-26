@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from suurennuslasi_db.session.config import settings
 
 engine = create_async_engine(
-    settings.DATABASE_URL,
+    settings.SUURENNUSLASI_DATABASE_URL,
     echo=True,
 )
 
