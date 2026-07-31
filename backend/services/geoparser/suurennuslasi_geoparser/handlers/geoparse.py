@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 @lru_cache(maxsize=1)
 def get_geoparser() -> Geoparser:
-    return Geoparser()
+    return Geoparser(spacy_model="en_core_web_trf")
 
 
 async def geoparse_post(event: PostParsed):
