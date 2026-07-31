@@ -52,4 +52,6 @@ class ImportJobRead(SQLModel):
     last_edited: datetime
     started_at: datetime | None = None
     finished_at: datetime | None = None
+    total_posts: int | None = None
+    processed_posts: int | None = None
     error_message: str | None = None

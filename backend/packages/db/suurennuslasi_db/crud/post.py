@@ -1,6 +1,6 @@
 import typing as t
 from uuid import UUID
-
+from sqlalchemy import select, func, case
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -71,3 +71,27 @@ class PostRepository(BaseRepository):
     @classmethod
     async def delete(cls, session: AsyncSession, id: UUID) -> Post:
         return await super().delete(session, id)
+
+    @classmethod
+    async def geoparsing_stats(cls, session: AsyncSession) -> tuple[int, int, int]:
+        """
+        Returns:
+            (total_posts, geoparsed_posts, ungeoparsed_posts)
+        """
+        stmt = select(
+            func.count().label("total"),
+            func.sum(case((cls.model.geoparsed_at.is_not(None), 1), else_=0)).label(
+                "geoparsed"
+            ),
+            func.sum(case((cls.model.geoparsed_at.is_(None), 1), else_=0)).label(
+                "ungeoparsed"
+            ),
+        )
+
+        total, geoparsed, ungeoparsed = (await session.execute(stmt)).one()
+
+        return (
+            total or 0,
+            geoparsed or 0,
+            ungeoparsed or 0,
+        )

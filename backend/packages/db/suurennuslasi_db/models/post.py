@@ -15,6 +15,7 @@ class PostBase(SQLModel):
     latitude: float | None = None
     longitude: float | None = None
     created_at: datetime | None = None
+    geoparsed_at: datetime | None = None
 
 
 class Post(PostBase, table=True):
@@ -43,6 +44,7 @@ class PostUpdate(SQLModel):
     latitude: float | None = None
     longitude: float | None = None
     created_at: datetime | None = None
+    geoparsed_at: datetime | None = None
     media: list["MediaUpdate"] | None = None
 
 
@@ -53,6 +55,7 @@ class PostRead(SQLModel):
     latitude: float | None = None
     longitude: float | None = None
     created_at: datetime | None = None
+    geoparsed_at: datetime | None = None
     media: list["MediaRead"] = Field(default_factory=list)
 
 

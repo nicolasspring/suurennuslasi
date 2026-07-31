@@ -3,10 +3,11 @@ from datetime import datetime
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from suurennuslasi_db.crud.post import PostRepository
 from suurennuslasi_db.crud.base import BaseRepository
 from suurennuslasi_db.crud.exceptions import ImportJobNotFoundException
 from suurennuslasi_db.models.job import ImportJob, ImportJobCreate, ImportJobUpdate
+from suurennuslasi_domain.constants.constants import IMPORT_JOB_STATUS
 
 
 class ImportJobRepository(BaseRepository):
@@ -51,3 +52,20 @@ class ImportJobRepository(BaseRepository):
     @classmethod
     async def delete(cls, session: AsyncSession, id: UUID) -> ImportJob:
         return await super().delete(session, id)
+
+    @classmethod
+    async def update_progress(cls, session: AsyncSession, job_id: UUID) -> ImportJob:
+        total, geoparsed, _ = await PostRepository.geoparsing_stats(session)
+        additional = {}
+        if total == geoparsed:
+            additional["status"] = IMPORT_JOB_STATUS.COMPLETED
+            additional["finished_at"] = datetime.now()
+        return await cls.update(
+            session,
+            ImportJobUpdate(
+                id=job_id,
+                total_posts=total,
+                geoparsed_posts=geoparsed,
+            ),
+            additional=additional,
+        )
