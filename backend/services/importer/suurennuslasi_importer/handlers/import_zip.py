@@ -7,7 +7,6 @@ from datetime import datetime
 from zipfile import Path, ZipFile
 
 import ijson
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from suurennuslasi_db.crud.job import ImportJobRepository
 from suurennuslasi_db.crud.media import MediaRepository
@@ -39,48 +38,52 @@ async def import_zip(event: ImportCreated):
         logger.info(
             f"Importing zip file for job {event.job_id} with object key {event.object_key}"
         )
-        with tempfile.NamedTemporaryFile() as tmp:
-            await AsyncObjectStorage.download_to_path(event.object_key, tmp.name)
+    with tempfile.NamedTemporaryFile() as tmp:
+        await AsyncObjectStorage.download_to_path(event.object_key, tmp.name)
 
-            with ZipFile(tmp.name) as archive:
-                media_saved = await save_media(session, archive)
-                posts_saved = await save_posts(session, event, archive)
+        with ZipFile(tmp.name) as archive:
+            media_saved = await save_media(archive)
+            posts_saved = await save_posts(event, archive)
     logger.info(
         f"Extracted {media_saved} media items and {posts_saved} posts for job {event.job_id}"
     )
-    await ImportJobRepository.update(
-        session,
-        ImportJobUpdate(
-            id=event.job_id,
-            total_posts=posts_saved,
-        ),
-    )
+    async with AsyncSessionLocal() as session:
+        await ImportJobRepository.update(
+            session,
+            ImportJobUpdate(
+                id=event.job_id,
+                total_posts=posts_saved,
+            ),
+        )
     await AsyncObjectStorage.delete(event.object_key)
     logger.info(f"Deleted zip file with object key {event.object_key} from storage")
 
 
-async def save_media(session: AsyncSession, file: ZipFile) -> int:
+async def save_media(file: ZipFile) -> int:
     root = Path(file)
     media = root / "media" / "posts"
-    for i, image in enumerate(media.glob("**.*")):
+    saved = 0
+    for image in media.glob("**.*"):
         with image.open("rb") as f:
             object_key = f"images/{image.name}"
             await AsyncObjectStorage.upload(object_key, f)
             f.seek(0, os.SEEK_END)
-            await MediaRepository.create(
-                session,
-                MediaCreate(
-                    filename=image.name,
-                    mime_type=mimetypes.guess_type(image.name)[0],
-                    object_key=object_key,
-                    size=f.tell(),
-                ),
-            )
+            async with AsyncSessionLocal() as session:
+                await MediaRepository.create(
+                    session,
+                    MediaCreate(
+                        filename=image.name,
+                        mime_type=mimetypes.guess_type(image.name)[0],
+                        object_key=object_key,
+                        size=f.tell(),
+                    ),
+                )
         logger.info(f"Imported media {image.name} with object key {object_key}")
-    return i + 1
+        saved += 1
+    return saved
 
 
-async def save_posts(session: AsyncSession, event: ImportCreated, file: ZipFile) -> int:
+async def save_posts(event: ImportCreated, file: ZipFile) -> int:
     root = Path(file)
     media = root / "your_instagram_activity" / "media"
     saved = 0
@@ -96,12 +99,13 @@ async def save_posts(session: AsyncSession, event: ImportCreated, file: ZipFile)
                 )
                 # instagram exports currently have mojibake in the json files
                 raw_json = fix_mojibake(raw_json)
-                post = await PostRepository.create(
-                    session,
-                    PostCreate(
-                        raw_json=raw_json,
-                    ),
-                )
+                async with AsyncSessionLocal() as session:
+                    post = await PostRepository.create(
+                        session,
+                        PostCreate(
+                            raw_json=raw_json,
+                        ),
+                    )
                 logger.info(f"Imported post {post.id} for job {event.job_id}")
                 payload = {"job_id": str(event.job_id), "post_id": str(post.id)}
                 await publish(

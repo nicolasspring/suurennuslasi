@@ -2,8 +2,6 @@ import json
 import logging
 from datetime import datetime
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from suurennuslasi_db.crud.job import ImportJobRepository
 from suurennuslasi_db.crud.media import MediaRepository
 from suurennuslasi_db.crud.post import PostRepository
@@ -19,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 async def parse_post(event: PostExtracted):
+    payload = None
     async with AsyncSessionLocal() as session:
         await ImportJobRepository.update(
             session,
@@ -76,11 +75,12 @@ async def parse_post(event: PostExtracted):
             ),
         )
         payload = {"job_id": str(event.job_id), "post_id": str(post.id)}
-        await publish(
-            exchange_name="imports",
-            routing_key="import.post_parsed",
-            payload=payload,
-        )
-        logger.info(
-            f"Post {event.post_id} for job {event.job_id} updated and ready for geoparsing"
-        )
+
+    await publish(
+        exchange_name="imports",
+        routing_key="import.post_parsed",
+        payload=payload,
+    )
+    logger.info(
+        f"Post {event.post_id} for job {event.job_id} updated and ready for geoparsing"
+    )
