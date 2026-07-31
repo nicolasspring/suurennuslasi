@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime
 from functools import lru_cache
 
 from geoparser import Geoparser
@@ -25,7 +26,7 @@ async def geoparse_post(event: PostParsed):
     async with AsyncSessionLocal() as session:
         await ImportJobRepository.update(
             session,
-            ImportJobUpdate(id=event.job_id, status=IMPORT_JOB_STATUS.PARSING),
+            ImportJobUpdate(id=event.job_id, status=IMPORT_JOB_STATUS.GEOPARSING),
         )
         logger.info(f"Geoparsing post {event.post_id} for job {event.job_id}")
         post = await PostRepository.read(session, event.post_id)
@@ -44,6 +45,7 @@ async def geoparse_post(event: PostParsed):
                         location=location,
                         latitude=latitude,
                         longitude=longitude,
+                        geoparsed_at=datetime.now(),
                     ),
                 )
                 logger.info(f"Updated post {event.post_id} with location {location}")
@@ -53,3 +55,10 @@ async def geoparse_post(event: PostParsed):
                 )
         else:
             logger.info(f"No toponyms detected for post {event.post_id}")
+        await PostRepository.update(
+            session, PostUpdate(id=post.id, geoparsed_at=datetime.now())
+        )
+        await ImportJobRepository.update_progress(session, event.job_id)
+        logger.info(
+            f"Geoparsing completed for post {event.post_id} for job {event.job_id}"
+        )
