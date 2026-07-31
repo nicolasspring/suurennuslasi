@@ -1,4 +1,5 @@
 import logging
+from functools import lru_cache
 
 from geoparser import Geoparser
 
@@ -10,10 +11,15 @@ from suurennuslasi_domain.constants import IMPORT_JOB_STATUS
 from suurennuslasi_events.events.models import PostParsed
 
 logger = logging.getLogger(__name__)
-geoparser = Geoparser()
+
+
+@lru_cache(maxsize=1)
+def get_geoparser() -> Geoparser:
+    return Geoparser()
 
 
 async def geoparse_post(event: PostParsed):
+    geoparser = get_geoparser()
     async with AsyncSessionLocal() as session:
         await ImportJobRepository.update(
             session,
