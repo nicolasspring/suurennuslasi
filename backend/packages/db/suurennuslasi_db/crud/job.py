@@ -3,9 +3,10 @@ from datetime import datetime
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from suurennuslasi_db.crud.post import PostRepository
+
 from suurennuslasi_db.crud.base import BaseRepository
 from suurennuslasi_db.crud.exceptions import ImportJobNotFoundException
+from suurennuslasi_db.crud.post import PostRepository
 from suurennuslasi_db.models.job import ImportJob, ImportJobCreate, ImportJobUpdate
 from suurennuslasi_domain.constants.constants import IMPORT_JOB_STATUS
 

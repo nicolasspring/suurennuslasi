@@ -1,6 +1,7 @@
 import typing as t
 from uuid import UUID
-from sqlalchemy import select, func, case
+
+from sqlalchemy import case, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
