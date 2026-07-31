@@ -2,6 +2,7 @@ import logging
 from functools import lru_cache
 
 from geoparser import Geoparser
+from geoparser.modules import SpacyRecognizer
 
 from suurennuslasi_db.crud.job import ImportJobRepository
 from suurennuslasi_db.crud.post import PostRepository
@@ -15,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 @lru_cache(maxsize=1)
 def get_geoparser() -> Geoparser:
-    return Geoparser(spacy_model="en_core_web_trf")
+    return Geoparser(recognizer=SpacyRecognizer(model_name="en_core_web_trf"))
 
 
 async def geoparse_post(event: PostParsed):
@@ -30,5 +31,5 @@ async def geoparse_post(event: PostParsed):
         document = geoparser.parse(post.caption)[0]
         for toponym in document.toponyms:
             logger.info(
-                f"Found toponym {toponym.name} in post {event.post_id} for job {event.job_id}"
+                f"Found toponym {toponym.text} in post {event.post_id} for job {event.job_id}"
             )
