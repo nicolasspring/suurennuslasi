@@ -11,5 +11,6 @@ stack:
 	docker build -t $(REGISTRY)/api:latest -f $(BACKEND)/services/api/Dockerfile $(BACKEND)
 	docker build -t $(REGISTRY)/importer:latest -f $(BACKEND)/services/importer/Dockerfile $(BACKEND)
 	docker build -t $(REGISTRY)/geoparser:latest -f $(BACKEND)/services/geoparser/Dockerfile $(BACKEND)
+	docker build -t $(REGISTRY)/frontend:latest -f frontend/Dockerfile frontend
 
 all: base stack
