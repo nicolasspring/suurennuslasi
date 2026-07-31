@@ -39,9 +39,9 @@ class ImportJobUpdate(SQLModel):
     last_edited: datetime | None = None
     started_at: datetime | None = None
     finished_at: datetime | None = None
-    error_message: str | None = None
     total_posts: int | None = None
     processed_posts: int | None = None
+    error_message: str | None = None
 
 
 class ImportJobRead(SQLModel):

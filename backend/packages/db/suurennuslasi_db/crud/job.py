@@ -66,7 +66,7 @@ class ImportJobRepository(BaseRepository):
             ImportJobUpdate(
                 id=job_id,
                 total_posts=total,
-                geoparsed_posts=geoparsed,
+                processed_posts=geoparsed,
             ),
             additional=additional,
         )
