@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 
 from suurennuslasi_importer.consumers import (
     consume_import_created,
@@ -42,6 +43,7 @@ async def main() -> None:
         queue_name="importer",
         handlers=handlers,
         dispatch=dispatch,
+        prefetch_count=int(os.getenv("RABBITMQ_PREFETCH_COUNT", "5")),
     )
 
 

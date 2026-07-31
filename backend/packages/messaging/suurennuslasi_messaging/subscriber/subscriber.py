@@ -10,10 +10,12 @@ async def subscribe(
     queue_name: str,
     handlers: dict[str, callable],
     dispatch: callable,
+    prefetch_count: int = 5,
 ):
     connection = await get_connection()
     async with connection:
         channel = await connection.channel()
+        await channel.set_qos(prefetch_count=prefetch_count)
         exchange = await channel.declare_exchange(
             exchange_name,
             aio_pika.ExchangeType.TOPIC,

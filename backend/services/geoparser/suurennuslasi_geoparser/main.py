@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 
 from suurennuslasi_geoparser.consumers import consume_post_parsed
 
@@ -33,6 +34,7 @@ async def main() -> None:
         queue_name="geoparser",
         handlers=handlers,
         dispatch=dispatch,
+        prefetch_count=int(os.getenv("RABBITMQ_PREFETCH_COUNT", "5")),
     )
 
 
