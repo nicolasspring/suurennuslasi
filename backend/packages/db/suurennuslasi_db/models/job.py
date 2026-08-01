@@ -33,7 +33,7 @@ class ImportJobCreate(ImportJobBase):
 
 class ImportJobUpdate(SQLModel):
     id: UUID
-    status: str | None = None
+    status: IMPORT_JOB_STATUS | None = None
     progress: float | None = None
     created_at: datetime | None = None
     last_edited: datetime | None = None
