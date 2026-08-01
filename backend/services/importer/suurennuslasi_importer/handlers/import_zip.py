@@ -104,6 +104,7 @@ async def save_posts(event: ImportCreated, file: ZipFile) -> int:
                         session,
                         PostCreate(
                             raw_json=raw_json,
+                            source_id=event.source_id,
                         ),
                     )
                 logger.info(f"Imported post {post.id} for job {event.job_id}")
