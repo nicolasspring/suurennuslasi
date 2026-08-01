@@ -1,12 +1,13 @@
 import logging
-import tempfile
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from suurennuslasi_db.crud.job import ImportJobRepository
+from suurennuslasi_db.crud.source import SourceRepository
 from suurennuslasi_db.models.job import ImportJobCreate, ImportJobRead, ImportJobUpdate
+from suurennuslasi_db.models.source import SourceCreate, SourceType
 from suurennuslasi_db.session.db import get_session
 from suurennuslasi_domain.constants import IMPORT_JOB_STATUS
 from suurennuslasi_messaging.publisher import publish
@@ -25,10 +26,24 @@ async def ingest_file(
     logger.info(f"File {file.filename} received")
     job = await ImportJobRepository.create(session, ImportJobCreate())
     logger.info(f"Import job with ID {job.id} created")
+    source = await SourceRepository.create(
+        session,
+        SourceCreate(
+            name=file.filename,
+            type=SourceType.ZIP_FILE,
+            mime_type=file.content_type,
+            size=getattr(file, "size", None),
+        ),
+    )
+    logger.info(f"Source with ID {source.id} created for upload {file.filename}")
     object_key = f"uploads/{job.id}/instagram.zip"
     await AsyncObjectStorage.upload(object_key, file)
     logger.info(f"File with key {object_key} uploaded to object storage")
-    payload = {"job_id": str(job.id), "object_key": object_key}
+    payload = {
+        "job_id": str(job.id),
+        "object_key": object_key,
+        "source_id": str(source.id),
+    }
     await publish(
         exchange_name="imports",
         routing_key="import.created",
