@@ -6,6 +6,7 @@ from pydantic import BaseModel
 class ImportCreated(BaseModel):
     job_id: UUID
     object_key: str
+    source_id: UUID
 
 
 class PostExtracted(BaseModel):
