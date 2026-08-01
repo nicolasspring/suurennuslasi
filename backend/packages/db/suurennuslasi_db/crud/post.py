@@ -8,8 +8,10 @@ from sqlalchemy.orm import selectinload
 from suurennuslasi_db.crud.base import BaseRepository
 from suurennuslasi_db.crud.exceptions import PostNotFoundException
 from suurennuslasi_db.crud.media import MediaRepository
+from suurennuslasi_db.crud.source import SourceRepository
 from suurennuslasi_db.models.media import MediaUpdate
 from suurennuslasi_db.models.post import Post, PostCreate, PostUpdate
+from suurennuslasi_db.models.source import SourceUpdate
 
 
 class PostRepository(BaseRepository):
@@ -40,6 +42,15 @@ class PostRepository(BaseRepository):
                     MediaUpdate(id=media.id, position=i),
                     additional={"post_id": post.id},
                 )
+        if item.source_id:
+            source = await SourceRepository.read(session, item.source_id)
+            await SourceRepository.update(
+                session,
+                SourceUpdate(
+                    id=item.source_id,
+                    n_posts=(source.n_posts or 0) + 1,
+                ),
+            )
         return post
 
     @classmethod
