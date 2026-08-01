@@ -10,3 +10,7 @@ class IMPORT_JOB_STATUS(str, Enum):
     COMPLETED = "completed"
     FAILED = "failed"
     CANCELLED = "cancelled"
+
+
+class SOURCE_TYPE(str, Enum):
+    ZIP = "zip"
