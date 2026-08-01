@@ -8,14 +8,17 @@ from sqlmodel import SQLModel
 from suurennuslasi_api.exceptions.handlers import (
     import_job_exception_handler,
     post_exception_handler,
+    source_exception_handler,
 )
 from suurennuslasi_api.routes.ingestion import router as ingestion_router
 from suurennuslasi_api.routes.posts import router as posts_router
+from suurennuslasi_api.routes.sources import router as sources_router
 
 import suurennuslasi_db.models
 from suurennuslasi_db.crud.exceptions import (
     ImportJobNotFoundException,
     PostNotFoundException,
+    SourceNotFoundException,
 )
 from suurennuslasi_db.session.db import engine
 from suurennuslasi_storage.crud.storage import AsyncObjectStorage
@@ -38,6 +41,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.add_exception_handler(ImportJobNotFoundException, import_job_exception_handler)
 app.add_exception_handler(PostNotFoundException, post_exception_handler)
+app.add_exception_handler(SourceNotFoundException, source_exception_handler)
 
 origins = [
     "http://localhost:5173",
@@ -53,3 +57,4 @@ app.add_middleware(
 
 app.include_router(ingestion_router)
 app.include_router(posts_router)
+app.include_router(sources_router)

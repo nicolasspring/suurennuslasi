@@ -6,6 +6,7 @@ from suurennuslasi_api.models.api import BaseResponse
 from suurennuslasi_db.crud.exceptions import (
     ImportJobNotFoundException,
     PostNotFoundException,
+    SourceNotFoundException,
 )
 
 
@@ -24,6 +25,17 @@ def post_exception_handler(
     return JSONResponse(
         content={
             **BaseResponse(status="error", message="Post not found.").model_dump()
+        },
+        status_code=status.HTTP_404_NOT_FOUND,
+    )
+
+
+def source_exception_handler(
+    request: Request, exc: SourceNotFoundException
+) -> JSONResponse:
+    return JSONResponse(
+        content={
+            **BaseResponse(status="error", message="Source not found.").model_dump()
         },
         status_code=status.HTTP_404_NOT_FOUND,
     )
