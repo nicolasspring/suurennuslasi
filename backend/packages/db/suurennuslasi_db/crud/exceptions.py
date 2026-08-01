@@ -8,3 +8,7 @@ class PostNotFoundException(Exception):
 
 class MediaNotFoundException(Exception):
     pass
+
+
+class SourceNotFoundException(Exception):
+    pass
