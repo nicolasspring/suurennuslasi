@@ -17,5 +17,6 @@
     "source.fixAll.eslint": "explicit"
   },
 
-  "python.testing.pytestEnabled": true
+  "python.testing.pytestEnabled": true,
+  "makefile.configureOnOpen": false
 }
