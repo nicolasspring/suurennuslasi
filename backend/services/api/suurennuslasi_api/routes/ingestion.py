@@ -7,9 +7,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from suurennuslasi_db.crud.job import ImportJobRepository
 from suurennuslasi_db.crud.source import SourceRepository
 from suurennuslasi_db.models.job import ImportJobCreate, ImportJobRead, ImportJobUpdate
-from suurennuslasi_db.models.source import SourceCreate, SourceType
+from suurennuslasi_db.models.source import SourceCreate
 from suurennuslasi_db.session.db import get_session
-from suurennuslasi_domain.constants import IMPORT_JOB_STATUS
+from suurennuslasi_domain.constants import IMPORT_JOB_STATUS, SOURCE_TYPE
 from suurennuslasi_messaging.publisher import publish
 from suurennuslasi_storage.crud.storage import AsyncObjectStorage
 
@@ -30,7 +30,7 @@ async def ingest_file(
         session,
         SourceCreate(
             name=file.filename,
-            type=SourceType.ZIP_FILE,
+            type=SOURCE_TYPE.ZIP,
             mime_type=file.content_type,
             size=getattr(file, "size", None),
         ),
