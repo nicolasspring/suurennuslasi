@@ -4,6 +4,7 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import UUID as SA_UUID
 from sqlalchemy import Column, ForeignKey
+from sqlalchemy.orm import Mapped
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -33,7 +34,7 @@ class Post(PostBase, table=True):
     __tablename__ = "post"
 
     id: UUID = Field(default_factory=uuid4, primary_key=True)
-    media: list["Media"] = Relationship(
+    media: Mapped[list["Media"]] = Relationship(
         back_populates="post",
         sa_relationship_kwargs={
             "order_by": "Media.position",
@@ -41,7 +42,7 @@ class Post(PostBase, table=True):
             "passive_deletes": True,
         },
     )
-    source: "Source" = Relationship(back_populates="posts")
+    source: Mapped["Source"] = Relationship(back_populates="posts")
 
 
 class PostCreate(PostBase):
@@ -71,13 +72,3 @@ class PostRead(SQLModel):
     geoparsed_at: datetime | None = None
     source_id: UUID | None = None
     media: list["MediaRead"] = Field(default_factory=list)
-
-
-# Rebuild the models to ensure relationships are properly initialized
-from suurennuslasi_db.models.media import Media, MediaCreate, MediaRead, MediaUpdate
-from suurennuslasi_db.models.source import Source
-
-Post.model_rebuild()
-PostCreate.model_rebuild()
-PostUpdate.model_rebuild()
-PostRead.model_rebuild()

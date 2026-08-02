@@ -1,10 +1,9 @@
-from __future__ import annotations
-
 from datetime import datetime
 from enum import Enum
 from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
+from sqlalchemy.orm import Mapped
 from sqlmodel import Field, Relationship, SQLModel
 from suurennuslasi_domain.constants import SOURCE_TYPE
 
@@ -25,7 +24,7 @@ class Source(SourceBase, table=True):
     __tablename__ = "source"
 
     id: UUID = Field(default_factory=uuid4, primary_key=True)
-    posts: list["Post"] = Relationship(
+    posts: Mapped[list["Post"]] = Relationship(
         back_populates="source",
         sa_relationship_kwargs={
             "cascade": "all, delete-orphan",
@@ -57,11 +56,3 @@ class SourceRead(SQLModel):
     created_at: datetime | None = None
     n_posts: int | None = None
     posts: list["PostRead"] = Field(default_factory=list)
-
-
-from suurennuslasi_db.models.post import Post, PostRead
-
-Source.model_rebuild()
-SourceCreate.model_rebuild()
-SourceUpdate.model_rebuild()
-SourceRead.model_rebuild()

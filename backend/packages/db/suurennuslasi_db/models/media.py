@@ -4,6 +4,7 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import UUID as SA_UUID
 from sqlalchemy import Column, ForeignKey
+from sqlalchemy.orm import Mapped
 from sqlmodel import Field, Relationship, SQLModel
 
 if TYPE_CHECKING:
@@ -29,7 +30,7 @@ class Media(MediaBase, table=True):
             SA_UUID, ForeignKey("post.id", ondelete="CASCADE"), nullable=True
         )
     )
-    post: "Post" = Relationship(back_populates="media")
+    post: Mapped["Post"] = Relationship(back_populates="media")
     position: int | None = Field(index=True)
 
 
@@ -59,11 +60,3 @@ class MediaRead(SQLModel):
     title: str | None = None
     created_at: datetime | None = None
     position: int | None = None
-
-
-# Rebuild the models to ensure relationships are properly initialized
-from suurennuslasi_db.models.post import Post
-
-Media.model_rebuild()
-MediaCreate.model_rebuild()
-MediaUpdate.model_rebuild()
