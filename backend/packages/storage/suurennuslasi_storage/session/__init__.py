@@ -1,1 +1,1 @@
-from .session import get_minio_client, minio_bucket_name
+from .session import get_object_storage_client, object_storage_bucket_name
