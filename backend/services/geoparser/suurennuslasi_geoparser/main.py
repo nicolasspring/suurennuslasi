@@ -28,8 +28,9 @@ def validate_geoparser_setup() -> None:
         message = str(exc)
         if "created by an older version" in message:
             logger.critical(
-                "Incompatible geoparser database. Remove /root/.local/share/geoparser/geoparser.db "
-                "and run gazetteer installation again in the geoparser container."
+                "Incompatible geoparser database. Stop the service, remove "
+                "/root/.local/share/geoparser/geoparser.db, then restart the service. "
+                "The installed gazetteer is stored separately and does not need reinstalling."
             )
         raise
 
