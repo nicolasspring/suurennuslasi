@@ -5,6 +5,7 @@ from uuid import UUID, uuid4
 
 from sqlalchemy.orm import Mapped
 from sqlmodel import Field, Relationship, SQLModel
+
 from suurennuslasi_domain.constants import SOURCE_TYPE
 
 if TYPE_CHECKING:
