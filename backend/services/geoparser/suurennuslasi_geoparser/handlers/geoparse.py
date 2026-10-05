@@ -22,23 +22,6 @@ from suurennuslasi_events.events.models import PostParsed
 logger = logging.getLogger(__name__)
 
 
-def _extract_location_hint(caption: str) -> str | None:
-    """
-    Extract the location segment from captions following this format:
-    <flag> <month> <year> - <location>\n<rest of caption>
-    """
-    first_line = caption.splitlines()[0].strip() if caption else ""
-    if not first_line:
-        return None
-
-    parts = POST_HEADER_LOCATION_SPLIT_PATTERN.split(first_line, maxsplit=1)
-    if len(parts) != 2:
-        return None
-
-    location_hint = parts[1].strip()
-    return location_hint or None
-
-
 def _first_document(parse_result):
     if isinstance(parse_result, list):
         return parse_result[0] if parse_result else None
@@ -71,11 +54,9 @@ async def geoparse_post(event: PostParsed):
         post = await PostRepository.read(session, event.post_id)
         post_id = post.id
         caption = post.caption or ""
-    location_hint = _extract_location_hint(caption)
-    text_to_parse = location_hint or caption
-    document = _first_document(geoparser.parse(text_to_parse))
-    if document is None and text_to_parse != caption:
-        document = _first_document(geoparser.parse(caption))
+    document = _first_document(
+        geoparser.parse(caption.replace("\n", " ").replace("\r", " "))
+    )
     if document is None:
         logger.warning(
             "Geoparser returned no document for post %s (job %s)",
