@@ -11,12 +11,16 @@ import { usePosts } from "../../features/posts/hooks/usePosts";
 import type { Post } from "../../features/posts/types";
 
 export function PostsMap() {
-  const { data: posts, isLoading } = usePosts();
+  const { data: posts, error, isError, isLoading } = usePosts();
 
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   if (isLoading) {
     return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div role="alert">Unable to load posts: {error.message}</div>;
   }
 
   return (
