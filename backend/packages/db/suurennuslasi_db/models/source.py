@@ -9,7 +9,7 @@ from sqlmodel import Field, Relationship, SQLModel
 from suurennuslasi_domain.constants import SOURCE_TYPE
 
 if TYPE_CHECKING:
-    from suurennuslasi_db.models.post import Post, PostRead
+    from suurennuslasi_db.models.post import Post
 
 
 class SourceBase(SQLModel):
@@ -56,4 +56,3 @@ class SourceRead(SQLModel):
     size: int | None = None
     created_at: datetime | None = None
     n_posts: int | None = None
-    posts: list["PostRead"] = Field(default_factory=list)
