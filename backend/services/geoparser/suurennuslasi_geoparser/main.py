@@ -3,6 +3,7 @@ import logging
 import os
 
 from suurennuslasi_geoparser.consumers import consume_post_parsed
+from suurennuslasi_geoparser.handlers.geoparse import get_geoparser
 
 from suurennuslasi_messaging.subscriber import subscribe
 
@@ -16,8 +17,25 @@ logger = logging.getLogger(__name__)
 handlers = {"import.post_parsed": consume_post_parsed}
 
 
+def validate_geoparser_setup() -> None:
+    geoparser = get_geoparser()
+    try:
+        result = geoparser.parse("Zurich")
+        document = result[0] if isinstance(result, list) else result
+        if not document.toponyms:
+            logger.warning("Geoparser startup check found no toponyms for sanity input")
+    except RuntimeError as exc:
+        message = str(exc)
+        if "created by an older version" in message:
+            logger.critical(
+                "Incompatible geoparser database. Remove /root/.local/share/geoparser/geoparser.db "
+                "and run gazetteer installation again in the geoparser container."
+            )
+        raise
+
+
 async def dispatch(message):
-    async with message.process():
+    async with message.process(requeue=True):
         handler = handlers.get(message.routing_key)
         if handler is None:
             logger.warning(
@@ -25,10 +43,17 @@ async def dispatch(message):
                 message.routing_key,
             )
             return
-        await handler(message)
+        try:
+            await handler(message)
+        except Exception:
+            logger.exception(
+                "Failed to process message with routing key %s", message.routing_key
+            )
+            raise
 
 
 async def main() -> None:
+    validate_geoparser_setup()
     await subscribe(
         exchange_name="imports",
         queue_name="geoparser",
