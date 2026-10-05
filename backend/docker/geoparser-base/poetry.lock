@@ -1116,15 +1116,15 @@ tqdm = ["tqdm"]
 
 [[package]]
 name = "geoparser"
-version = "0.5.0"
+version = "0.6.1"
 description = "A customizable geoparsing library for unstructured text"
 optional = false
 python-versions = "<3.15,>=3.10"
 groups = ["main"]
 markers = "(sys_platform == \"linux\" or sys_platform == \"win32\") and (platform_machine == \"aarch64\" or platform_machine == \"x86_64\") or sys_platform != \"linux\" or platform_machine != \"x86_64\""
 files = [
-    {file = "geoparser-0.5.0-py3-none-any.whl", hash = "sha256:d4eac0bab9c12c3fe1d98dd531d0000049e1dcbd03ea51dd7a8221db308a2e55"},
-    {file = "geoparser-0.5.0.tar.gz", hash = "sha256:84e8b72cfc156f967e69873b89391e265431b1bc4730084673babea83a9b1e08"},
+    {file = "geoparser-0.6.1-py3-none-any.whl", hash = "sha256:95be3cd22a5ac01f41487b5f6f140d3a5513da7296261c47ba6e723e933723c0"},
+    {file = "geoparser-0.6.1.tar.gz", hash = "sha256:a5e9a7529c1242a7a84d834605aa1ad9c8f6c350944a21e59df79704cbbd6082"},
 ]
 
 [package.dependencies]
@@ -1144,6 +1144,7 @@ rich = ">=15.0.0,<16.0.0"
 sentence-transformers = ">=5.1.2,<6.0.0"
 shapely = ">=2.1.2,<3.0.0"
 spacy = ">=3.8.7,<3.8.14 || >3.8.14,<4.0.0"
+spacy-curated-transformers = ">=0.3.0,<0.4.0"
 sqlalchemy = ">=2.0.44,<3.0.0"
 sqlmodel = ">=0.0.39,<0.0.40"
 torch = ">=2.9.0,<3.0.0"
