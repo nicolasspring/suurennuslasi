@@ -1116,15 +1116,15 @@ tqdm = ["tqdm"]
 
 [[package]]
 name = "geoparser"
-version = "0.6.1"
+version = "0.6.2"
 description = "A customizable geoparsing library for unstructured text"
 optional = false
 python-versions = "<3.15,>=3.10"
 groups = ["main"]
 markers = "(sys_platform == \"linux\" or sys_platform == \"win32\") and (platform_machine == \"aarch64\" or platform_machine == \"x86_64\") or sys_platform != \"linux\" or platform_machine != \"x86_64\""
 files = [
-    {file = "geoparser-0.6.1-py3-none-any.whl", hash = "sha256:95be3cd22a5ac01f41487b5f6f140d3a5513da7296261c47ba6e723e933723c0"},
-    {file = "geoparser-0.6.1.tar.gz", hash = "sha256:a5e9a7529c1242a7a84d834605aa1ad9c8f6c350944a21e59df79704cbbd6082"},
+    {file = "geoparser-0.6.2-py3-none-any.whl", hash = "sha256:ff81c41e4706f989be9aac0669e37ddd68aed30689784c8e5742ebad8642d969"},
+    {file = "geoparser-0.6.2.tar.gz", hash = "sha256:0137888328b5ce71c8673789a89c5f1e9f5eb98ee455824fe7fdb567372e278c"},
 ]
 
 [package.dependencies]
@@ -4882,4 +4882,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.14"
-content-hash = "ece88e44b73985f581b1a15d3cdcbcc887464fde85b7b9a50e182044f000e815"
+content-hash = "e69d591b7aa65b976b4bea4ca72c5b1557eb4b30e177b3fe1ceaf0bc385ca03d"
