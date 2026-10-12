@@ -6,17 +6,12 @@ from functools import lru_cache
 from geoparser import Geoparser
 from geoparser.modules import SentenceTransformerResolver, SpacyRecognizer
 
-from suurennuslasi_geoparser.geoparser_database import configure_geoparser_database
-
 from suurennuslasi_db.crud.job import ImportJobRepository
 from suurennuslasi_db.crud.post import PostRepository
 from suurennuslasi_db.models.job import ImportJobUpdate
 from suurennuslasi_db.models.post import PostUpdate
 from suurennuslasi_db.session.db import AsyncSessionLocal
-from suurennuslasi_domain.constants import (
-    IMPORT_JOB_STATUS,
-    POST_HEADER_LOCATION_SPLIT_PATTERN,
-)
+from suurennuslasi_domain.constants import IMPORT_JOB_STATUS
 from suurennuslasi_events.events.models import PostParsed
 
 logger = logging.getLogger(__name__)
@@ -30,7 +25,6 @@ def _first_document(parse_result):
 
 @lru_cache(maxsize=1)
 def get_geoparser() -> Geoparser:
-    configure_geoparser_database()
     return Geoparser(
         recognizer=SpacyRecognizer(model_name="en_core_web_trf"),
         # Lower similarity threshold to improve recall
